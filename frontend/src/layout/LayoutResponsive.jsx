@@ -60,10 +60,12 @@ export default function LayoutResponsive({ children }) {
           </Link>
 
           {/* Transacciones */}
-          <Link to="/transactions" className="flex flex-col items-center">
-            <FiList size={22} />
-            <span className="text-xs mt-1">Trs</span>
-          </Link>
+        <Link to="/transactions" className="flex flex-col items-center">
+          <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h10v2H4v-2z" />
+          </svg>
+          <p className="text-xs mt-[3px]">Trs</p>
+        </Link>
 
           {/* Perfil */}
           <Link to="/profile" className="flex flex-col items-center">
