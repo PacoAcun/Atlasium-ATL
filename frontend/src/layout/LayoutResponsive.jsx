@@ -20,12 +20,12 @@ export default function LayoutResponsive({ children }) {
   }, []);
 
   return (
-    <div className="h-screen w-screen flex bg-black text-gray-100 relative">
+    <div className="h-screen w-screen flex bg-dark text-gray-100 relative">
 
       {/* ============ SIDEBAR DESKTOP (colapsable) ============ */}
       {!isMobile && (
         <aside
-          className={`border-r border-neutral-800 p-6 flex flex-col transition-all duration-300 ${
+          className={`border-r border-neutral-700 p-6 flex flex-col transition-all duration-300 ${
             collapsed ? "w-20" : "w-60"
           }`}
         >
@@ -79,7 +79,7 @@ export default function LayoutResponsive({ children }) {
 
       {/* ============ HEADER MÓVIL (vacío) ============ */}
       {isMobile && (
-        <header className="fixed top-0 left-0 w-full h-14 bg-black border-b border-neutral-800"></header>
+        <header className="fixed top-0 left-0 w-full h-14 bg-dark border-b border-neutral-700"></header>
       )}
 
       {/* ============ MAIN CONTENT ============ */}
@@ -89,7 +89,7 @@ export default function LayoutResponsive({ children }) {
 
       {/* ============ MOBILE BOTTOM NAV ============ */}
       {isMobile && (
-        <nav className="fixed bottom-0 left-0 w-full h-16 bg-black border-t border-neutral-800 flex justify-around items-center">
+        <nav className="fixed bottom-0 left-0 w-full h-16 bg-dark border-t border-neutral-700 flex justify-around items-center">
 
           <Link to="/dashboard" className="flex flex-col items-center">
             <FiHome size={22} />

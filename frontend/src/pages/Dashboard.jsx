@@ -21,7 +21,7 @@ export default function Dashboard() {
         Bienvenido a tu espacio en Atlasium.
       </p>
 
-      <div className="mt-10 bg-neutral-900 border border-neutral-700 p-6 rounded-xl">
+      <div className="mt-10 bg-dark border border-neutral-700 p-6 rounded">
         <h2 className="text-2xl font-semibold">Próximos pasos</h2>
         <ul className="mt-4 space-y-2 text-gray-300">
           <li>• Solicitar Wallet temporal</li>
