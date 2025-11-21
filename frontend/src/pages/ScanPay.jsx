@@ -10,10 +10,10 @@ import BackButton from "../components/ui/BackButton";
 export default function ScanPay() {
   const navigate = useNavigate();
   const { refreshBalance } = useContext(AuthContext);
-  
+
   // Modes: 'select', 'scan', 'manual', 'confirm', 'success'
   const [mode, setMode] = useState('select');
-  
+
   const [scannedData, setScannedData] = useState(null);
   const [parsedData, setParsedData] = useState(null);
   const [amount, setAmount] = useState("");
@@ -42,7 +42,7 @@ export default function ScanPay() {
         setParsedData(data);
         if (data.amount) setAmount(data.amount);
       } else {
-         setParsedData({ address: raw });
+        setParsedData({ address: raw });
       }
     } catch (e) {
       // Si no es JSON, asumir que es solo la address
@@ -53,11 +53,11 @@ export default function ScanPay() {
 
   const handlePayment = async () => {
     if (!parsedData?.address || !amount) return;
-    
+
     setProcessing(true);
     try {
       const { data, error } = await supabase.functions.invoke('transfer', {
-        body: { 
+        body: {
           toAddress: parsedData.address,
           amount: amount
         }
@@ -118,15 +118,15 @@ export default function ScanPay() {
       {/* MODE: SCAN */}
       {mode === 'scan' && (
         <div className="relative">
-           <button 
+          <button
             onClick={resetFlow}
             className="absolute -top-12 right-0 text-gray-400 hover:text-white flex items-center gap-2"
           >
             <FiX /> Cancelar
           </button>
           <div className="bg-black rounded-xl overflow-hidden border border-neutral-800 relative">
-            <Scanner 
-              onScan={handleScan} 
+            <Scanner
+              onScan={handleScan}
               styles={{ container: { height: 300 } }}
             />
             <p className="text-center text-gray-400 p-4">
@@ -139,7 +139,7 @@ export default function ScanPay() {
       {/* MODE: MANUAL */}
       {mode === 'manual' && (
         <div className="bg-neutral-900 border border-neutral-800 p-6 rounded-xl relative">
-          <button 
+          <button
             onClick={resetFlow}
             className="absolute top-4 right-4 text-gray-400 hover:text-white"
           >
@@ -147,7 +147,7 @@ export default function ScanPay() {
           </button>
 
           <h2 className="text-lg font-semibold mb-4">Ingresar Dirección</h2>
-          
+
           <div className="mb-6">
             <label className="block text-sm text-gray-400 mb-2">Dirección de Wallet (0x...)</label>
             <input
@@ -196,8 +196,7 @@ export default function ScanPay() {
               onChange={(e) => setAmount(e.target.value)}
               className="w-full bg-black border border-neutral-700 rounded-lg p-4 text-2xl text-white text-center focus:border-blue-500 focus:outline-none"
               placeholder="0.00"
-              autoFocus={!parsedData?.amount}
-              readOnly={!!parsedData?.amount} // Si el QR traía monto, es fijo
+              readOnly={!!parsedData?.amount}
             />
           </div>
 
@@ -226,10 +225,10 @@ export default function ScanPay() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
             </svg>
           </div>
-          
+
           <h2 className="text-2xl font-bold text-white mb-2">¡Transacción Exitosa!</h2>
           <p className="text-gray-400 mb-6">Tu pago se ha procesado correctamente.</p>
-          
+
           <div className="bg-black p-4 rounded-lg mb-6 text-left">
             <p className="text-xs text-gray-500 mb-1">Hash de transacción:</p>
             <p className="font-mono text-xs text-blue-400 break-all">{txHash}</p>
