@@ -4,7 +4,7 @@ import { Scanner } from "@yudiel/react-qr-scanner";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { AuthContext } from "../context/AuthContext";
-import { FiMegaphone } from "react-icons/fi";
+import { FiVolume2 } from "react-icons/fi";
 
 
 export default function ScanPay() {
@@ -78,7 +78,7 @@ export default function ScanPay() {
         <div className="bg-neutral-900 border border-neutral-800 p-6 rounded-xl">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
-              <FiMegaphone size={22} className="text-blue-400" />
+              <FiVolume2 size={22} className="text-blue-400" />
             </div>
 
             <div>
