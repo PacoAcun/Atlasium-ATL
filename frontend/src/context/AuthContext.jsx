@@ -118,14 +118,8 @@ export function AuthProvider({ children }) {
 
       if (sessionError) throw sessionError;
 
-      // Cargar perfil del usuario
-      setUser({
-        id: data.user.id,
-        email: data.user.email,
-        name: data.user.name,
-        walletAddress: data.user.walletAddress,
-        role: data.user.role,
-      });
+      // Cargar perfil completo del usuario con balances
+      await loadUserProfile(data.access_token);
     } catch (error) {
       throw new Error(error.message || "Error during login");
     }

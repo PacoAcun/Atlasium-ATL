@@ -1,16 +1,26 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Login() {
   const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    await login(email, password);
-    window.location.href = "/dashboard";
+    setIsLoading(true);
+    
+    try {
+      await login(email, password);
+      navigate("/dashboard");
+    } catch (error) {
+      alert(error.message);
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -33,8 +43,11 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="bg-white text-black p-3 rounded font-medium">
-          Entrar
+        <button 
+          className="bg-white text-black p-3 rounded font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={isLoading}
+        >
+          {isLoading ? "Cargando..." : "Entrar"}
         </button>
       </form>
 
