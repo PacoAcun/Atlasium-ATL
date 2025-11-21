@@ -1,15 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiCopy, FiPlusSquare } from 'react-icons/fi';
+import { FiCopy, FiPlusSquare, FiX } from 'react-icons/fi';
+import { IoQrCode } from "react-icons/io5";
 import { AuthContext } from '../context/AuthContext';
 import { EventContext } from '../context/EventContext';
 import LayoutResponsive from '../layout/LayoutResponsive';
 import LoadingScreen from '../components/ui/LoadingScreen';
+import { QRCodeSVG } from 'qrcode.react';
 
 export default function Wallet() {
   const { user, refreshBalance } = useContext(AuthContext);
   const { myEvents, selectEvent } = useContext(EventContext);
   const navigate = useNavigate();
+  const [showQRModal, setShowQRModal] = useState(false);
 
   if (!user) {
     return <LoadingScreen text="Cargando Billetera..." />;
@@ -57,8 +60,18 @@ export default function Wallet() {
           <button
             onClick={copyToClipboard}
             className="p-2 rounded hover:bg-neutral-800 transition text-gray-300 hover:text-white"
+            title="Copiar Dirección"
           >
             <FiCopy size={20} />
+          </button>
+
+           {/* BOTÓN QR */}
+           <button
+            onClick={() => setShowQRModal(true)}
+            className="p-2 rounded hover:bg-neutral-800 transition text-blue-400 hover:text-blue-300"
+            title="Ver mi QR"
+          >
+            <IoQrCode size={20} />
           </button>
         </div>
       </div>
@@ -135,6 +148,38 @@ export default function Wallet() {
           Los ETH y tokens no tienen valor real.
         </p>
       </div>
+
+      {/* QR Modal */}
+      {showQRModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-2xl max-w-sm w-full relative">
+            <button 
+              onClick={() => setShowQRModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <FiX size={24} />
+            </button>
+
+            <h3 className="text-xl font-bold text-center mb-6 text-white">Mi Código QR</h3>
+            
+            <div className="bg-white p-4 rounded-xl mx-auto w-fit mb-6">
+              <QRCodeSVG 
+                value={user.walletAddress} 
+                size={200}
+                level="H"
+              />
+            </div>
+
+            <p className="text-center text-gray-400 text-sm break-all font-mono bg-black/50 p-3 rounded-lg border border-neutral-800">
+              {user.walletAddress}
+            </p>
+
+            <p className="text-center text-xs text-gray-500 mt-4">
+              Escanea este código para recibir ATL
+            </p>
+          </div>
+        </div>
+      )}
     </LayoutResponsive>
   );
 }
