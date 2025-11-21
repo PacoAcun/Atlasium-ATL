@@ -149,7 +149,7 @@ export default function ScanPay() {
           <h2 className="text-lg font-semibold mb-4">Ingresar Dirección</h2>
           
           <div className="mb-6">
-            <label className="block text-sm text-gray-400 mb-2">Dirección de Wallet (0x...)</label>
+            <label className="block text-medium text-gray-400 mb-2">Dirección de Wallet (0x...)</label>
             <input
               type="text"
               value={manualAddress}
