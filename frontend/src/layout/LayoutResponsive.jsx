@@ -1,16 +1,21 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useLocation } from "react-router-dom";
-import { FiHome, FiCreditCard, FiList, FiUser, FiMenu, FiCamera, FiRefreshCw, FiPlusSquare } from "react-icons/fi";
+import {
+  FiHome,
+  FiCreditCard,
+  FiList,
+  FiUser,
+  FiMenu,
+  FiCamera,
+  FiRefreshCw,
+} from "react-icons/fi";
 
 export default function LayoutResponsive({ children }) {
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();
 
-  // Estado para colapsar sidebar en desktop
   const [collapsed, setCollapsed] = useState(false);
-
-  // Detectar si es móvil
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -22,22 +27,19 @@ export default function LayoutResponsive({ children }) {
   return (
     <div className="h-screen w-screen flex bg-dark text-gray-100 relative">
 
-      {/* ============ SIDEBAR DESKTOP (colapsable) ============ */}
+      {/* ============ SIDEBAR DESKTOP ============ */}
       {!isMobile && (
         <aside
-          className={`border-r border-neutral-700 p-6 flex flex-col transition-all duration-300 ${
+          className={`border-r border-neutral-700 p-6 flex flex-col transition-all duration-300 bg-dark ${
             collapsed ? "w-20" : "w-60"
           }`}
         >
-          {/* Botón para colapsar */}
           <button
             onClick={() => setCollapsed(!collapsed)}
             className="mb-6 hover:text-white"
           >
             <FiMenu size={22} />
           </button>
-
-          {/* Título (solo si no está colapsado) */}
 
           <nav className="flex flex-col gap-4 mt-4">
             <Link to="/dashboard" className="hover:text-white flex items-center gap-3">
@@ -56,17 +58,16 @@ export default function LayoutResponsive({ children }) {
             </Link>
 
             <Link to="/topup" className="hover:text-white flex items-center gap-3">
-            <FiRefreshCw size={20} />
-            {!collapsed && "Recargar"}
+              <FiRefreshCw size={20} />
+              {!collapsed && "Recargar"}
             </Link>
 
             <Link to="/scan" className="hover:text-white flex items-center gap-3">
-            <FiCamera size={20} />
-            {!collapsed && "Pagar"}
+              <FiCamera size={20} />
+              {!collapsed && "Pagar"}
             </Link>
           </nav>
 
-          {/* FOOTER */}
           {!collapsed && (
             <div className="mt-auto">
               <p className="text-gray-500 text-sm mb-2">{user?.email}</p>
@@ -81,25 +82,29 @@ export default function LayoutResponsive({ children }) {
         </aside>
       )}
 
-      {/* ============ HEADER MÓVIL (vacío) ============ */}
+      {/* ============ HEADER MÓVIL ============ */}
       {isMobile && (
-        <header className="fixed top-0 left-0 w-full h-14 bg-dark border-b border-neutral-700 flex items-center px-4">
-            <Link to="/profile" className="flex items-center gap-2 text-gray-400 hover:text-white">
+        <header className="fixed top-0 left-0 w-full h-14 bg-dark z-50 border-b border-neutral-700 flex items-center px-4 shadow-md">
+          <Link to="/profile" className="flex items-center gap-2 text-gray-400 hover:text-white">
             <FiUser size={20} />
             <span className="text-xs">Perfil</span>
-            </Link>
+          </Link>
         </header>
       )}
 
       {/* ============ MAIN CONTENT ============ */}
-      <main className={`flex-1 overflow-y-auto px-6 py-20 md:p-10`}>
+      <main
+        className={`
+          flex-1 overflow-y-auto px-6
+          ${isMobile ? "pt-16 pb-32" : "py-10"}
+        `}
+      >
         {children}
       </main>
 
-      {/* ============ MOBILE BOTTOM NAV ============ */}
+      {/* ============ BOTTOM NAV MÓVIL ============ */}
       {isMobile && (
-        <nav className="fixed bottom-0 left-0 w-full h-16 bg-dark border-t border-neutral-700 flex justify-around items-center">
-
+        <nav className="fixed bottom-0 left-0 w-full h-16 bg-dark z-50 border-t border-neutral-700 flex justify-around items-center shadow-lg">
           <Link to="/dashboard" className="flex flex-col items-center text-gray-400 hover:text-white">
             <FiHome size={20} />
             <span className="text-[10px] mt-1">Home</span>
@@ -124,7 +129,6 @@ export default function LayoutResponsive({ children }) {
             <FiCamera size={20} />
             <span className="text-[10px] mt-1">Pagar</span>
           </Link>
-
         </nav>
       )}
     </div>
