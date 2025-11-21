@@ -23,7 +23,7 @@ export default function TopUp() {
 
       if (!data.success) throw new Error(data.error || 'Error en la recarga');
 
-      alert(`✅ Recarga exitosa de ${amount} ATL\nTx Hash: ${data.txHash.substring(0, 10)}...`);
+      alert(`Recarga exitosa de ${amount} ATL\nTx Hash: ${data.txHash.substring(0, 10)}...`);
       await refreshBalance();
       navigate("/dashboard");
     } catch (error) {
@@ -48,13 +48,13 @@ export default function TopUp() {
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full bg-black border border-neutral-700 rounded-lg p-3 pl-8 text-white focus:border-purple-500 focus:outline-none"
+                className="w-full bg-black border border-neutral-700 rounded-lg p-3 pl-8 text-white focus:border-blue-500 focus:outline-none"
                 placeholder="0.00"
                 required
                 min="1"
               />
             </div>
-            <p className="text-xs text-purple-400 mt-2">
+            <p className="text-xs text-blue-400 mt-2">
               Tasa de cambio: Q1.00 = 1.00 ATL
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function TopUp() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Procesando..." : `Pagar Q${amount || '0'}`}
           </button>

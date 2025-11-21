@@ -37,7 +37,7 @@ export default function Wallet() {
           </p>
           <button
             onClick={copyToClipboard}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded transition"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded transition"
           >
             Copiar
           </button>
@@ -52,9 +52,9 @@ export default function Wallet() {
           <p className="text-gray-400 text-xs mt-1">ETH (Sepolia)</p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-900/40 to-purple-700/40 border border-purple-500/30 p-6 rounded-xl">
+        <div className="bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl">
           <p className="text-gray-300 text-sm mb-2">Balance Atlasium</p>
-          <p className="text-4xl font-bold text-purple-400">{user.atlBalance || '0'}</p>
+          <p className="text-4xl font-bold text-blue-400">{user.atlBalance || '0'}</p>
           <p className="text-gray-400 text-xs mt-1">ATL Tokens</p>
         </div>
       </div>

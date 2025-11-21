@@ -56,7 +56,7 @@ export default function History() {
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-                    isIncoming ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"
+                    isIncoming ? "bg-blue-500/20 text-blue-400" : "bg-red-500/20 text-red-400"
                   }`}>
                     {isIncoming ? "↓" : "↑"}
                   </div>
@@ -70,10 +70,10 @@ export default function History() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className={`font-bold ${isIncoming ? "text-green-400" : "text-white"}`}>
+                  <p className={`font-bold ${isIncoming ? "text-blue-400" : "text-white"}`}>
                     {isIncoming ? "+" : "-"}{amount} ATL
                   </p>
-                  <p className="text-xs text-green-500 capitalize">
+                  <p className="text-xs text-blue-500 capitalize">
                     Confirmado
                   </p>
                 </div>
