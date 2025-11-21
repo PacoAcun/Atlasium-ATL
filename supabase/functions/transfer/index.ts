@@ -14,6 +14,14 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders });
   }
 
+  // Validate config
+  if (!config.encryption.secret) {
+    return new Response(
+      JSON.stringify({ success: false, error: 'Server config error: Missing Encryption Secret' }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+    );
+  }
+
   try {
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) throw new Error('Missing authorization header');
@@ -32,9 +40,9 @@ serve(async (req) => {
 
     // 1. Obtener wallet del usuario (sender)
     const { data: walletData, error: walletError } = await supabase
-      .from('wallets')
-      .select('address, encrypted_private_key')
-      .eq('user_id', user.id)
+      .from('users')
+      .select('wallet_address, encrypted_private_key')
+      .eq('id', user.id)
       .single();
 
     if (walletError || !walletData) throw new Error('Wallet not found');
@@ -51,7 +59,7 @@ serve(async (req) => {
       "function transfer(address to, uint256 amount) returns (bool)",
       "function decimals() view returns (uint8)"
     ];
-    const contract = new ethers.Contract(config.tokens.atlAddress, abi, signer);
+    const contract = new ethers.Contract(config.sepolia.atlTokenAddress, abi, signer);
 
     // 5. Ejecutar transferencia
     const amountWei = ethers.parseEther(amount.toString());
@@ -72,7 +80,7 @@ serve(async (req) => {
         amount: amount,
         tx_type: 'transfer', // 'transfer' para pagos P2P/Eventos
         status: 'completed',
-        from_address: walletData.address,
+        from_address: walletData.wallet_address,
         to_address: toAddress
       });
 
@@ -89,10 +97,10 @@ serve(async (req) => {
   } catch (error) {
     console.error('Transfer error:', error);
     return new Response(
-      JSON.stringify({ success: false, error: error.message }),
+      JSON.stringify({ success: false, error: error.message || 'Internal server error' }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 400,
+        status: 200,
       }
     );
   }
