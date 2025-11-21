@@ -10,7 +10,8 @@ export default function Home() {
         <img
           src={logo}
           alt="Atlasium Logo"
-          className="w-28 h-28 mb-6 select-none"
+          className="h-24 mb-6 select-none"
+          style={{ objectFit: "contain", width: "auto" }}
         />
 
         <h1 className="text-5xl font-bold mb-6">Atlasium</h1>
