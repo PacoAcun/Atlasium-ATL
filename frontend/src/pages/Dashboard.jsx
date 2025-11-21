@@ -35,7 +35,7 @@ export default function Dashboard() {
         
         <div className="flex items-baseline gap-2">
           <span className="text-5xl font-bold text-white tracking-tight">
-            {user.atlBalance || '0'}
+            {user.balances?.atl || '0'}
           </span>
           <span className="text-xl font-medium text-purple-400">ATL</span>
             <button 

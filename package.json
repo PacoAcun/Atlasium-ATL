@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@alchemy/mcp-server": "^0.1.8"
+  }
+}

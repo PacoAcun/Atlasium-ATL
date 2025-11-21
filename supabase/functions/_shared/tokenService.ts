@@ -14,19 +14,35 @@ const ERC20_ABI = [
  * Obtiene el balance de tokens ATL de una dirección
  */
 export async function getATLBalance(walletAddress: string): Promise<string> {
+  const apiKey = config.sepolia.rpcUrl.split('/').pop();
+  const url = `https://eth-sepolia.g.alchemy.com/v2/${apiKey}`;
+
   try {
-    const provider = new ethers.JsonRpcProvider(config.sepolia.rpcUrl);
-    const contract = new ethers.Contract(
-      config.sepolia.atlTokenAddress,
-      ERC20_ABI,
-      provider
-    );
-    
-    const balance = await contract.balanceOf(walletAddress);
-    // Asumiendo 18 decimales (estándar ERC-20)
-    return ethers.formatUnits(balance, 18);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: 1,
+        jsonrpc: '2.0',
+        method: 'alchemy_getTokenBalances',
+        params: [
+          walletAddress,
+          [config.sepolia.atlTokenAddress]
+        ],
+      }),
+    });
+
+    const data = await response.json();
+    const hexBalance = data.result?.tokenBalances?.[0]?.tokenBalance;
+
+    if (!hexBalance) return '0';
+
+    // Convertir hex a decimal (asumiendo 18 decimales)
+    // Usamos BigInt para manejar el hex y luego ethers.formatUnits o división manual
+    const balanceBigInt = BigInt(hexBalance);
+    return ethers.formatUnits(balanceBigInt, 18);
   } catch (error) {
-    console.error('Error getting ATL balance:', error);
+    console.error('Error getting ATL balance via Alchemy:', error);
     return '0';
   }
 }
