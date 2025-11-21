@@ -70,10 +70,11 @@ export default function History() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className={`font-bold ${isIncoming ? "text-blue-400" : "text-white"}`}>
+                  <p className={`font-bold ${isIncoming ? "text-blue-400" : "text-red-400"}`}>
                     {isIncoming ? "+" : "-"}{amount} ATL
                   </p>
-                  <p className="text-xs text-blue-500 capitalize">
+
+                  <p className={`text-xs capitalize ${isIncoming ? "text-blue-500" : "text-red-500"}`}>
                     Confirmado
                   </p>
                 </div>

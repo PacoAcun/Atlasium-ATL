@@ -157,7 +157,7 @@ export default function EventDashboard() {
           </div>
           <div className="text-right">
             <p className="text-xs text-gray-400">Balance Total</p>
-            <p className="text-xl font-bold text-purple-400">{currentEvent.balance} ATL</p>
+            <p className="text-xl font-bold text-blue-400">{currentEvent.balance} ATL</p>
             {currentEvent.userRole === 'admin' && (
               <Link to="/event-audit" className="text-sm text-blue-400 hover:text-white">
                 Ver Transacciones
@@ -224,7 +224,7 @@ export default function EventDashboard() {
                 <button
                   onClick={handleCreateStaticQR}
                   disabled={!amount}
-                  className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl text-lg transition disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl text-lg transition disabled:opacity-50"
                 >
                   Crear Fijo
                 </button>
@@ -322,7 +322,7 @@ export default function EventDashboard() {
               </button>
               <button 
                 onClick={confirmCreateStaticQR}
-                className="bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl font-bold"
+                className="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold"
               >
                 Confirmar
               </button>
