@@ -64,16 +64,6 @@ export default function LayoutResponsive({ children }) {
             <FiCamera size={20} />
             {!collapsed && "Pagar"}
             </Link>
-
-            <Link to="/create-event" className="hover:text-white flex items-center gap-3">
-              <FiPlusSquare size={20} />
-              {!collapsed && "Crear Evento"}
-            </Link>
-
-            <Link to="/profile" className="hover:text-white flex items-center gap-3">
-              <FiUser size={20} />
-              {!collapsed && "Perfil"}
-            </Link>
           </nav>
 
           {/* FOOTER */}
@@ -135,10 +125,6 @@ export default function LayoutResponsive({ children }) {
             <span className="text-[10px] mt-1">Pagar</span>
           </Link>
 
-          <Link to="/create-event" className="flex flex-col items-center text-gray-400 hover:text-white">
-            <FiPlusSquare size={20} />
-            <span className="text-[10px] mt-1">Evento</span>
-          </Link>
         </nav>
       )}
     </div>

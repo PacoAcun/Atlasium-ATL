@@ -19,12 +19,12 @@ export default function Wallet() {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(user.walletAddress);
-    alert("✅ Dirección copiada al portapapeles");
+    alert("Dirección copiada al portapapeles");
   };
 
   return (
     <LayoutResponsive>
-      <h1 className="text-3xl font-bold mb-2">💼 Mi Wallet</h1>
+      <h1 className="text-3xl font-bold mb-2">Mi Wallet</h1>
       <p className="text-gray-400 mb-6">Gestiona tu wallet Ethereum en Sepolia</p>
 
       {/* Wallet Address Card */}
@@ -38,7 +38,7 @@ export default function Wallet() {
             onClick={copyToClipboard}
             className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded transition"
           >
-            📋 Copiar
+            Copiar
           </button>
         </div>
       </div>
@@ -64,7 +64,7 @@ export default function Wallet() {
           onClick={refreshBalance}
           className="flex-1 bg-neutral-800 hover:bg-neutral-700 border border-neutral-600 p-3 rounded-lg transition"
         >
-          🔄 Actualizar Balance
+          Actualizar Balance
         </button>
         <a
           href={`https://sepolia.etherscan.io/address/${user.walletAddress}`}
@@ -72,13 +72,13 @@ export default function Wallet() {
           rel="noopener noreferrer"
           className="flex-1 bg-blue-600 hover:bg-blue-700 p-3 rounded-lg text-center transition"
         >
-          🔍 Ver en Etherscan
+          Ver en Etherscan
         </a>
       </div>
 
       {/* Event Organizer Section */}
       <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl mb-6">
-        <h2 className="text-lg font-semibold mb-3">🎉 Organizador de Eventos</h2>
+        <h2 className="text-lg font-semibold mb-3">Organizar Evento</h2>
         <p className="text-gray-400 text-sm mb-4">
           Crea eventos, gestiona cobros y staff con tu propia wallet temporal.
         </p>
@@ -105,8 +105,7 @@ export default function Wallet() {
         <button
           onClick={() => navigate('/create-event')}
           className="block w-full bg-green-600 hover:bg-green-700 text-white text-center p-3 rounded-lg transition font-medium"
-        >
-          ➕ Crear Nuevo Evento
+        > <FiPlusSquare size={16} />Crear Nuevo Evento
         </button>
       </div>
 
