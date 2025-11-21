@@ -62,6 +62,14 @@ export function EventProvider({ children }) {
     }
   }
 
+  // Persistir evento seleccionado
+  useEffect(() => {
+    const savedEventId = localStorage.getItem('currentEventId');
+    if (savedEventId && user && !currentEvent) {
+      selectEvent(savedEventId);
+    }
+  }, [user]);
+
   async function selectEvent(eventId) {
     setLoadingEvent(true);
     try {
@@ -73,9 +81,11 @@ export function EventProvider({ children }) {
       if (!data.success) throw new Error(data.error);
 
       setCurrentEvent(data.event);
+      localStorage.setItem('currentEventId', eventId); // Guardar en localStorage
     } catch (error) {
       console.error('Error selecting event:', error);
       alert('Error loading event details');
+      localStorage.removeItem('currentEventId'); // Limpiar si falla
     } finally {
       setLoadingEvent(false);
     }

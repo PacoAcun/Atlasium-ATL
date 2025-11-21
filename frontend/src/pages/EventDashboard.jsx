@@ -6,7 +6,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Link } from 'react-router-dom';
 
 export default function EventDashboard() {
-  const { currentEvent, loadingEvent, inviteStaff } = useContext(EventContext);
+  const { currentEvent, loadingEvent, inviteStaff, selectEvent } = useContext(EventContext);
   const [amount, setAmount] = useState('');
   const [showQR, setShowQR] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState('waiting'); // waiting, success
