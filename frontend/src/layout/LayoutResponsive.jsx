@@ -56,8 +56,8 @@ export default function LayoutResponsive({ children }) {
             </Link>
 
             <Link to="/topup" className="hover:text-white flex items-center gap-3">
-              <span className="text-xl">💰</span>
-              {!collapsed && "Recargar"}
+            <FiRefreshCw size={20} />
+            {!collapsed && "Recargar"}
             </Link>
 
             <Link to="/scan" className="hover:text-white flex items-center gap-3">
@@ -88,7 +88,12 @@ export default function LayoutResponsive({ children }) {
 
       {/* ============ HEADER MÓVIL (vacío) ============ */}
       {isMobile && (
-        <header className="fixed top-0 left-0 w-full h-14 bg-dark border-b border-neutral-700"></header>
+        <header className="fixed top-0 left-0 w-full h-14 bg-dark border-b border-neutral-700 flex items-center px-4">
+            <Link to="/profile" className="flex items-center gap-2 text-gray-400 hover:text-white">
+            <FiUser size={20} />
+            <span className="text-xs">Perfil</span>
+            </Link>
+        </header>
       )}
 
       {/* ============ MAIN CONTENT ============ */}
@@ -110,23 +115,22 @@ export default function LayoutResponsive({ children }) {
             <span className="text-[10px] mt-1">Wallet</span>
           </Link>
 
-          <Link to="/scan" className="flex flex-col items-center text-purple-500 hover:text-purple-400">
-            <div className="bg-purple-500/20 p-2 rounded-full -mt-4 border border-purple-500/50">
-              <span className="text-xl">📷</span>
-            </div>
-            <span className="text-[10px] mt-1">Pagar</span>
-          </Link>
-
           <Link to="/history" className="flex flex-col items-center text-gray-400 hover:text-white">
             <FiList size={20} />
             <span className="text-[10px] mt-1">Historial</span>
           </Link>
 
-          <Link to="/profile" className="flex flex-col items-center text-gray-400 hover:text-white">
-            <FiUser size={20} />
-            <span className="text-[10px] mt-1">Perfil</span>
+          <Link to="/topup" className="flex flex-col items-center text-gray-400 hover:text-white">
+            <FiRefreshCw size={20} />
+            <span className="text-[10px] mt-1">Recargar</span>
           </Link>
 
+          <Link to="/scan" className="flex flex-col items-center text-purple-500 hover:text-purple-400">
+            <div className="bg-purple-500/20 p-2 rounded-full -mt-4 border border-purple-500/50">
+                <FiCamera size={20} />
+            </div>
+            <span className="text-[10px] mt-1">Pagar</span>
+          </Link>
         </nav>
       )}
     </div>
