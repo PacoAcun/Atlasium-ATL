@@ -11,6 +11,26 @@ export default function EventDashboard() {
   const [showQR, setShowQR] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState('waiting'); // waiting, success
   const [staffEmail, setStaffEmail] = useState('');
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    if (currentEvent) {
+      fetchEventTransactions();
+    }
+  }, [currentEvent]);
+
+  async function fetchEventTransactions() {
+    try {
+      const { data, error } = await supabase.functions.invoke('get-transactions', {
+        body: { eventId: currentEvent.id }
+      });
+      if (!error && data.success) {
+        setTransactions(data.transactions || []);
+      }
+    } catch (err) {
+      console.error('Error fetching event transactions:', err);
+    }
+  }
 
   // Realtime Listener for Payments
   useEffect(() => {
@@ -149,6 +169,50 @@ export default function EventDashboard() {
             </div>
           </div>
         )}
+
+        {/* Transaction History */}
+        <div className="mt-8 p-4 border-t border-neutral-800 pb-20">
+          <h3 className="text-sm font-bold text-gray-400 mb-4">Historial de Transacciones</h3>
+          {transactions.length === 0 ? (
+            <p className="text-gray-500 text-center py-4">No hay transacciones aún</p>
+          ) : (
+            <div className="space-y-3">
+              {transactions.map((tx) => {
+                const isIncoming = tx.to?.toLowerCase() === currentEvent.wallet_address?.toLowerCase();
+                const amount = parseFloat(tx.value || 0).toFixed(2);
+                const date = new Date(tx.metadata.blockTimestamp);
+                
+                return (
+                  <div 
+                    key={tx.uniqueId} 
+                    className="bg-neutral-900 border border-neutral-800 p-3 rounded-xl flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
+                        isIncoming ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"
+                      }`}>
+                        {isIncoming ? "↓" : "↑"}
+                      </div>
+                      <div>
+                        <p className="font-medium text-white text-sm">
+                          {isIncoming ? "Cobro Recibido" : "Pago Enviado"}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {date.toLocaleDateString()} • {date.toLocaleTimeString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className={`font-bold text-sm ${isIncoming ? "text-green-400" : "text-white"}`}>
+                        {isIncoming ? "+" : "-"}{amount} ATL
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* QR Modal */}

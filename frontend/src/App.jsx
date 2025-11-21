@@ -11,6 +11,7 @@ import CreateEvent from "./pages/CreateEvent";
 import EventDashboard from "./pages/EventDashboard";
 import EventAudit from "./pages/EventAudit";
 import Wallet from "./pages/Wallet";
+import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
@@ -83,6 +84,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <Wallet />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />

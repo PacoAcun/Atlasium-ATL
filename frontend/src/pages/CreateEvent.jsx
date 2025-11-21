@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import LayoutResponsive from '../layout/LayoutResponsive';
 
 export default function CreateEvent() {
-  const { createEvent } = useContext(EventContext);
+  const { createEvent, setCurrentEvent } = useContext(EventContext);
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -15,8 +15,9 @@ export default function CreateEvent() {
     setLoading(true);
     try {
       const event = await createEvent(name, description);
+      setCurrentEvent(event); // Seleccionar el nuevo evento automáticamente
       alert('✅ Evento creado exitosamente!');
-      navigate('/events'); // Redirigir a lista de eventos o dashboard del evento
+      navigate('/event-dashboard'); // Ir al dashboard del evento
     } catch (error) {
       alert('Error: ' + error.message);
     } finally {
@@ -27,6 +28,13 @@ export default function CreateEvent() {
   return (
     <LayoutResponsive>
       <div className="max-w-md mx-auto mt-10">
+        <button 
+          onClick={() => navigate('/wallet')}
+          className="mb-6 text-gray-400 hover:text-white flex items-center gap-2"
+        >
+          ← Volver a Wallet
+        </button>
+
         <h1 className="text-3xl font-bold mb-6 text-white">Crear Nuevo Evento</h1>
         <p className="text-gray-400 mb-8">
           Genera una wallet temporal exclusiva para tu evento y comienza a cobrar en ATL.
@@ -55,13 +63,22 @@ export default function CreateEvent() {
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-4 rounded-xl transition disabled:opacity-50"
-          >
-            {loading ? 'Creando Wallet...' : 'Crear Evento'}
-          </button>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => navigate('/wallet')}
+              className="flex-1 bg-neutral-800 hover:bg-neutral-700 text-white font-medium py-4 rounded-xl transition"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-4 rounded-xl transition disabled:opacity-50"
+            >
+              {loading ? 'Creando...' : 'Crear Evento'}
+            </button>
+          </div>
         </form>
       </div>
     </LayoutResponsive>

@@ -13,33 +13,50 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders });
   }
 
+  // Validate config
+  if (!config.supabase.serviceRoleKey) {
+    return new Response(
+      JSON.stringify({ success: false, error: 'Server config error: Missing Service Role Key' }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+    );
+  }
+  if (!config.encryption.secret) {
+    return new Response(
+      JSON.stringify({ success: false, error: 'Server config error: Missing Encryption Secret' }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+    );
+  }
+
   try {
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) throw new Error('Missing authorization header');
 
-    const supabase = createClient(
+    // 1. Verificar usuario con token (Cliente Anon)
+    const supabaseAuth = createClient(
       config.supabase.url,
       config.supabase.anonKey,
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
     if (authError || !user) throw new Error('Invalid token');
 
     const { name, description } = await req.json();
 
     if (!name) throw new Error('Event name is required');
 
-    // 1. Crear nueva wallet para el evento
+    // 2. Cliente Admin para base de datos (Bypass RLS)
+    const supabaseAdmin = createClient(
+      config.supabase.url,
+      config.supabase.serviceRoleKey
+    );
+
+    // 3. Crear nueva wallet para el evento
     const wallet = await createWallet();
     const encryptedKey = await encryptPrivateKey(wallet.privateKey);
 
-    // 2. Financiar wallet con gas (opcional, pero recomendado si va a hacer envíos)
-    // Por ahora lo comentamos para ahorrar gas de prueba, o lo dejamos si es necesario
-    // await fundWalletWithGas(wallet.address);
-
-    // 3. Insertar evento en DB
-    const { data: event, error: eventError } = await supabase
+    // 4. Insertar evento en DB usando Service Role
+    const { data: event, error: eventError } = await supabaseAdmin
       .from('events')
       .insert({
         name,
@@ -53,8 +70,8 @@ serve(async (req) => {
 
     if (eventError) throw eventError;
 
-    // 4. Agregar creador como admin del evento
-    const { error: memberError } = await supabase
+    // 5. Agregar creador como admin del evento usando Service Role
+    const { error: memberError } = await supabaseAdmin
       .from('event_members')
       .insert({
         event_id: event.id,
@@ -74,11 +91,12 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Create Event error:', error);
+    // Return 200 with error details so client can read it
     return new Response(
-      JSON.stringify({ success: false, error: error.message }),
+      JSON.stringify({ success: false, error: error.message || 'Internal server error' }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 400,
+        status: 200,
       }
     );
   }

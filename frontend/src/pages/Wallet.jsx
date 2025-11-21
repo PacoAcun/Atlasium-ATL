@@ -1,9 +1,13 @@
 import LayoutResponsive from "../layout/LayoutResponsive";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { EventContext } from "../context/EventContext";
 
 export default function Wallet() {
   const { user, refreshBalance } = useContext(AuthContext);
+  const { myEvents, selectEvent } = useContext(EventContext);
+  const navigate = useNavigate();
 
   if (!user) {
     return (
@@ -70,6 +74,40 @@ export default function Wallet() {
         >
           🔍 Ver en Etherscan
         </a>
+      </div>
+
+      {/* Event Organizer Section */}
+      <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl mb-6">
+        <h2 className="text-lg font-semibold mb-3">🎉 Organizador de Eventos</h2>
+        <p className="text-gray-400 text-sm mb-4">
+          Crea eventos, gestiona cobros y staff con tu propia wallet temporal.
+        </p>
+        
+        {myEvents.length > 0 && (
+          <div className="mb-4 space-y-2">
+            <h3 className="text-sm font-medium text-gray-300">Mis Eventos:</h3>
+            {myEvents.map(event => (
+              <button
+                key={event.id}
+                onClick={() => {
+                  selectEvent(event.id);
+                  navigate('/event-dashboard');
+                }}
+                className="w-full flex items-center justify-between bg-black/40 hover:bg-black/60 p-3 rounded-lg border border-neutral-800 transition group"
+              >
+                <span className="font-medium text-white">{event.name}</span>
+                <span className="text-xs text-gray-500 group-hover:text-purple-400 transition">Gestionar →</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        <button
+          onClick={() => navigate('/create-event')}
+          className="block w-full bg-green-600 hover:bg-green-700 text-white text-center p-3 rounded-lg transition font-medium"
+        >
+          ➕ Crear Nuevo Evento
+        </button>
       </div>
 
       {/* Info Card */}
