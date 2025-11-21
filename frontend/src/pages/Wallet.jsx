@@ -30,6 +30,13 @@ export default function Wallet() {
       <h1 className="text-3xl font-bold mb-2">Mi Wallet</h1>
       <p className="text-gray-400 mb-6">Gestiona tu wallet Ethereum en Sepolia</p>
 
+      {/* Info Card */}
+      <div className="bg-yellow-900/20 border border-yellow-600/30 p-4 rounded-lg">
+        <p className="text-yellow-200 text-sm">
+          ⚠️ <strong>Red de prueba:</strong> Esta wallet funciona en Sepolia Testnet. 
+          Los ETH y tokens no tienen valor real.
+        </p>
+      </div>
 
       {/* Balances */}
 
@@ -53,7 +60,7 @@ export default function Wallet() {
 
 
       {/* Wallet Address Card */}
-      <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl mb-6">
+      <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl mb-3">
         <h2 className="text-m font-medium mb-3">Dirección de Wallet</h2>
 
         <div className="flex items-center gap-3">
@@ -127,13 +134,6 @@ export default function Wallet() {
         </button>
       </div>
 
-      {/* Info Card */}
-      <div className="bg-yellow-900/20 border border-yellow-600/30 p-4 rounded-lg">
-        <p className="text-yellow-200 text-sm">
-          ⚠️ <strong>Red de prueba:</strong> Esta wallet funciona en Sepolia Testnet. 
-          Los ETH y tokens no tienen valor real.
-        </p>
-      </div>
     </LayoutResponsive>
   );
 }
