@@ -32,7 +32,7 @@ export default function Wallet() {
 
       {/* Balances */}
 
-           <div className="mb-8 mt-8 bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl relative overflow-hidden">
+           <div className="mb-3 mt-8 bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4 opacity-10">
               </div>
       
