@@ -3,6 +3,8 @@ import { EventContext } from '../context/EventContext';
 import { useNavigate } from 'react-router-dom';
 import LayoutResponsive from '../layout/LayoutResponsive';
 
+import BackButton from '../components/ui/BackButton';
+
 export default function CreateEvent() {
   const { createEvent, setCurrentEvent } = useContext(EventContext);
   const navigate = useNavigate();
@@ -39,12 +41,7 @@ export default function CreateEvent() {
   return (
     <LayoutResponsive>
       <div className="mx-auto">
-        <button 
-          onClick={() => navigate('/wallet')}
-          className="mb-2 text-gray-400 hover:text-white flex items-center gap-2"
-        >
-          ← Volver a Wallet
-        </button>
+        <BackButton to="/wallet" label="Volver a Wallet" />
 
         <h1 className="text-2xl font-bold mb-2 text-white">Crear Nuevo Evento</h1>
         <p className="text-gray-400 mb-4 text-sm">

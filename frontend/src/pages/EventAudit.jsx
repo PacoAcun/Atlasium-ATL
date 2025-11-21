@@ -2,8 +2,9 @@ import { useState, useEffect, useContext } from 'react';
 import { EventContext } from '../context/EventContext';
 import { supabase } from '../lib/supabase';
 import LayoutResponsive from '../layout/LayoutResponsive';
-import { FiArrowDownLeft, FiArrowUpRight, FiClock } from 'react-icons/fi';
+import { FiArrowDownLeft, FiArrowUpRight, FiClock, FiExternalLink } from 'react-icons/fi';
 import LoadingScreen from '../components/ui/LoadingScreen';
+import BackButton from '../components/ui/BackButton';
 
 export default function EventAudit() {
   const { currentEvent, loadingEvent } = useContext(EventContext);
@@ -48,13 +49,13 @@ export default function EventAudit() {
       if (error) throw error;
       if (!data.success) throw new Error(data.error);
 
-      // Filtrar y ordenar
-      const txs = data.transactions.transfers || [];
+      // Fix: data.transactions is the array, not data.transactions.transfers
+      const txs = data.transactions || [];
       setTransactions(txs);
 
       // Calcular ventas totales (entradas)
       const sales = txs
-        .filter(tx => tx.to.toLowerCase() === currentEvent.wallet_address.toLowerCase())
+        .filter(tx => tx.to && currentEvent.wallet_address && tx.to.toLowerCase() === currentEvent.wallet_address.toLowerCase())
         .reduce((acc, tx) => acc + parseFloat(tx.value), 0);
       
       setTotalSales(sales);
@@ -72,6 +73,8 @@ export default function EventAudit() {
 
   return (
     <LayoutResponsive>
+      <BackButton to="/event-dashboard" label="Volver al Evento" />
+      
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">
@@ -108,19 +111,20 @@ export default function EventAudit() {
           <div className="divide-y divide-neutral-800">
             {transactions.map((tx) => {
               const isIncoming =
+                tx.to && currentEvent.wallet_address && 
                 tx.to.toLowerCase() === currentEvent.wallet_address.toLowerCase();
 
               return (
                 <div
-                  key={tx.hash}
+                  key={tx.hash || tx.uniqueId} // Fallback key
                   className="p-4 flex items-center justify-between hover:bg-neutral-800/50 transition"
                 >
                   <div className="flex items-center gap-4">
                     <div
                       className={`p-3 rounded-full ${
                         isIncoming
-                          ? "bg-blue-500/10 text-blue-500"
-                          : "bg-red-500/10 text-red-500"
+                          ? "bg-blue-500/20 text-blue-400"
+                          : "bg-red-500/20 text-red-400"
                       }`}
                     >
                       {isIncoming ? (
@@ -136,8 +140,8 @@ export default function EventAudit() {
                       </p>
                       <p className="text-xs text-gray-500 font-mono">
                         {isIncoming
-                          ? `De: ${tx.from.slice(0, 6)}...${tx.from.slice(-4)}`
-                          : `A: ${tx.to.slice(0, 6)}...${tx.to.slice(-4)}`}
+                          ? `De: ${tx.from ? tx.from.slice(0, 6) + '...' + tx.from.slice(-4) : 'Desconocido'}`
+                          : `A: ${tx.to ? tx.to.slice(0, 6) + '...' + tx.to.slice(-4) : 'Desconocido'}`}
                       </p>
                     </div>
                   </div>
@@ -145,19 +149,30 @@ export default function EventAudit() {
                   <div className="text-right">
                     <p
                       className={`font-bold ${
-                        isIncoming ? "text-blue-400" : "text-white"
+                        isIncoming ? "text-blue-400" : "text-red-400"
                       }`}
                     >
                       {isIncoming ? "+" : "-"}
                       {parseFloat(tx.value).toFixed(2)} ATL
                     </p>
-                    <div className="flex items-center justify-end gap-1 text-xs text-gray-500 mt-1">
-                      <FiClock size={10} />
-                      <span>
-                        {new Date(
-                          tx.metadata.blockTimestamp
-                        ).toLocaleString()}
-                      </span>
+                    <div className="flex items-center justify-end gap-3 mt-1">
+                      <div className="flex items-center gap-1 text-xs text-gray-500">
+                        <FiClock size={10} />
+                        <span>
+                          {tx.metadata?.blockTimestamp 
+                            ? new Date(tx.metadata.blockTimestamp).toLocaleString() 
+                            : 'Fecha desconocida'}
+                        </span>
+                      </div>
+                      <a 
+                        href={`https://sepolia.etherscan.io/tx/${tx.hash}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:text-blue-400 transition"
+                        title="Ver en Etherscan"
+                      >
+                        <FiExternalLink size={12} />
+                      </a>
                     </div>
                   </div>
                 </div>

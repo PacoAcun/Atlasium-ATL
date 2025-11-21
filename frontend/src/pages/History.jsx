@@ -3,6 +3,9 @@ import { supabase } from '../lib/supabase';
 import { AuthContext } from '../context/AuthContext';
 import LayoutResponsive from '../layout/LayoutResponsive';
 import LoadingScreen from '../components/ui/LoadingScreen';
+import { FiExternalLink } from 'react-icons/fi';
+
+import BackButton from '../components/ui/BackButton';
 
 export default function History() {
   const { user } = useContext(AuthContext);
@@ -37,6 +40,7 @@ export default function History() {
 
   return (
     <LayoutResponsive>
+      <BackButton to="/dashboard" label="Volver al Dashboard" />
       <h1 className="text-3xl font-bold mb-6">Historial de Transacciones</h1>
       
       {transactions.length === 0 ? (
@@ -71,15 +75,26 @@ export default function History() {
                     </p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className={`font-bold ${isIncoming ? "text-blue-400" : "text-red-400"}`}>
-                    {isIncoming ? "+" : "-"}{amount} ATL
-                  </p>
+                  <div className="text-right">
+                    <p className={`font-bold ${isIncoming ? "text-blue-400" : "text-red-400"}`}>
+                      {isIncoming ? "+" : "-"}{amount} ATL
+                    </p>
 
-                  <p className={`text-xs capitalize ${isIncoming ? "text-blue-500" : "text-red-500"}`}>
-                    Confirmado
-                  </p>
-                </div>
+                    <div className="flex items-center justify-end gap-2 mt-1">
+                      <p className={`text-xs capitalize ${isIncoming ? "text-blue-500" : "text-red-500"}`}>
+                        Confirmado
+                      </p>
+                      <a 
+                        href={`https://sepolia.etherscan.io/tx/${tx.hash}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-gray-500 hover:text-white transition"
+                        title="Ver en Etherscan"
+                      >
+                        <FiExternalLink size={12} />
+                      </a>
+                    </div>
+                  </div>
               </div>
             );
           })}

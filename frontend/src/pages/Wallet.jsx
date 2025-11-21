@@ -7,6 +7,7 @@ import { EventContext } from '../context/EventContext';
 import LayoutResponsive from '../layout/LayoutResponsive';
 import LoadingScreen from '../components/ui/LoadingScreen';
 import { QRCodeSVG } from 'qrcode.react';
+import BackButton from '../components/ui/BackButton';
 
 export default function Wallet() {
   const { user, refreshBalance } = useContext(AuthContext);
@@ -25,6 +26,7 @@ export default function Wallet() {
 
   return (
     <LayoutResponsive>
+      <BackButton to="/dashboard" label="Volver al Dashboard" />
       <h1 className="text-3xl font-bold mb-2">Mi Wallet</h1>
       <p className="text-gray-400 mb-6">Gestiona tu wallet Ethereum en Sepolia</p>
 

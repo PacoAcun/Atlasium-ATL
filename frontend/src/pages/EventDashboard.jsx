@@ -5,6 +5,7 @@ import LayoutResponsive from '../layout/LayoutResponsive';
 import { QRCodeSVG } from 'qrcode.react';
 import { Link } from 'react-router-dom';
 import LoadingScreen from '../components/ui/LoadingScreen';
+import BackButton from '../components/ui/BackButton';
 
 export default function EventDashboard() {
   const { currentEvent, loadingEvent, inviteStaff, selectEvent } = useContext(EventContext);
@@ -174,6 +175,7 @@ export default function EventDashboard() {
 
   return (
     <LayoutResponsive>
+      <BackButton to="/wallet" label="Volver a Wallet" />
       <div className="flex flex-col h-full">
         {/* Header Evento */}
         <div className="bg-neutral-900 border-b border-neutral-800 p-4 flex justify-between items-center">

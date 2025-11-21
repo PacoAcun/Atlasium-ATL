@@ -3,7 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import LayoutResponsive from '../layout/LayoutResponsive';
 import LoadingScreen from '../components/ui/LoadingScreen';
 import { supabase } from '../lib/supabase';
-import { FiArrowDownLeft, FiArrowUpRight } from 'react-icons/fi';
+import { FiArrowDownLeft, FiArrowUpRight, FiExternalLink } from 'react-icons/fi';
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
@@ -102,9 +102,20 @@ export default function Dashboard() {
                       </p>
                     </div>
                   </div>
-                  <span className={`font-bold ${isIncoming ? 'text-blue-400' : 'text-red-400'}`}>
-                    {isIncoming ? '+' : '-'}{tx.value} ATL
-                  </span>
+                  <div className="text-right">
+                    <span className={`font-bold block ${isIncoming ? 'text-blue-400' : 'text-red-400'}`}>
+                      {isIncoming ? '+' : '-'}{tx.value} ATL
+                    </span>
+                    <a 
+                      href={`https://sepolia.etherscan.io/tx/${tx.hash}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-white mt-1 transition"
+                      title="Ver en Etherscan"
+                    >
+                      <FiExternalLink size={10} /> Explorer
+                    </a>
+                  </div>
                 </div>
               );
             })}

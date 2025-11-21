@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { AuthContext } from "../context/AuthContext";
 import { FiUser, FiCamera, FiEdit, FiX } from "react-icons/fi";
+import BackButton from "../components/ui/BackButton";
 
 export default function ScanPay() {
   const navigate = useNavigate();
@@ -87,7 +88,8 @@ export default function ScanPay() {
 
   return (
     <LayoutResponsive>
-      <h1 className="text-2xl font-bold mb-6">Métodos de pago</h1>
+      <BackButton to="/dashboard" label="Volver al Dashboard" />
+      <h1 className="text-2xl font-bold mb-6">Enviar / Pagar</h1>
 
       {/* MODE: SELECT */}
       {mode === 'select' && (
