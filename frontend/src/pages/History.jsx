@@ -40,7 +40,7 @@ export default function History() {
 
   return (
     <LayoutResponsive>
-      <h1 className="text-3xl font-bold mb-6">Historial de Transacciones</h1>
+      <h1 className="text-3xl font-bold mb-6 mt-10">Historial de Transacciones</h1>
       
       {transactions.length === 0 ? (
         <div className="text-center text-gray-500 py-10">

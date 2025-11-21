@@ -43,9 +43,9 @@ export default function TopUp() {
   return (
     <LayoutResponsive>
       <div className="mt-10">
-        <h1 className="text-3xl font-bold mb-6 text-white">Comprar ATL</h1>
+        <h1 className="text-3xl font-bold mb-6 text-white">Recargar ATL</h1>
 
-        <div className="bg-neutral-900 border border-neutral-800 p-6 rounded-xl">
+        <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl">
           <form onSubmit={handleTopUp} className="space-y-6">
             <div>
               <label className="block text-sm text-gray-400 mb-2">Monto a comprar (Q)</label>
