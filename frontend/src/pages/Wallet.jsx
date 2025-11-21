@@ -28,37 +28,14 @@ export default function Wallet() {
       <h1 className="text-3xl font-bold mb-2">Mi Wallet</h1>
       <p className="text-gray-400 mb-6">Gestiona tu wallet Ethereum en Sepolia</p>
 
-      {/* Wallet Address Card */}
-      <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl mb-6">
-        <h2 className="text-lg font-semibold mb-3">Dirección de Wallet</h2>
-        <div className="flex items-center gap-3">
-          <p className="flex-1 font-mono text-sm bg-black/50 p-3 rounded break-all">
-            {user.walletAddress}
-          </p>
-          <button
-            onClick={copyToClipboard}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded transition"
-          >
-            Copiar
-          </button>
-        </div>
-      </div>
 
       {/* Balances */}
-      <div className="bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl">
-        <p className="text-gray-300 text-sm mb-2">Balance Atlasium</p>
-        <p className="text-4xl font-bold text-blue-400">{user.atlBalance || '0'}</p>
-        <p className="text-gray-400 text-xs mt-1">ATL Tokens</p>
-      </div>
 
-
-
-
-           <div className="mt-8 bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl relative overflow-hidden">
+           <div className="mb-8 mt-8 bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4 opacity-10">
               </div>
       
-              <h2 className="text-xl font-semibold mb-2 text-gray-200">Balance Disponible</h2>
+              <h2 className="text-m font-semibold mb-2 text-gray-200">Balance Disponible</h2>
               
               <div className="flex items-baseline gap-2">
                 <span className="text-4xl font-bold text-blue-400">
@@ -73,6 +50,22 @@ export default function Wallet() {
       
             </div>
 
+
+      {/* Wallet Address Card */}
+      <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl mb-6">
+        <h2 className="text-lg font-semibold mb-3">Dirección de Wallet</h2>
+        <div className="flex items-center gap-3">
+          <p className="flex-1 font-mono text-sm bg-dark p-3 rounded break-all">
+            {user.walletAddress}
+          </p>
+          <button
+            onClick={copyToClipboard}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded transition"
+          >
+            Copiar
+          </button>
+        </div>
+      </div>
 
 
 
