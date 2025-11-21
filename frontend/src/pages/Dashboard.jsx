@@ -24,7 +24,7 @@ export default function Dashboard() {
       </p>
 
       {/* Wallet Info Card */}
-      <div className="mt-8 bg-gradient-to-br from-azulito to-blue-900/40 border border-azulito p-6 rounded-xl relative overflow-hidden">
+     <div className="mt-8 bg-gradient-to-br from-azulito to-blue-900/40 border border-azulito p-6 rounded-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-4 opacity-10">
           <svg className="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z" />
@@ -37,7 +37,7 @@ export default function Dashboard() {
           <span className="text-5xl font-bold text-white tracking-tight">
             {user.balances?.atl || '0'}
           </span>
-          <span className="text-xl font-medium text-azulito-400">ATL</span>
+          <span className="text-xl font-medium text-azulito">ATL</span>
             <button 
             onClick={refreshBalance}
             className="ml-3 flex items-center gap-1 text-gray-300 hover:text-white underline font-semibold transition"
