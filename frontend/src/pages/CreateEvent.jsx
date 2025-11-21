@@ -61,7 +61,7 @@ export default function CreateEvent() {
             />
           </div>
 
-          <div className="grid grid-rows-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm text-gray-400 mb-1">Inicio</label>
               <input
