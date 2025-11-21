@@ -37,18 +37,24 @@ export default function Wallet() {
           </p>
           <button
             onClick={copyToClipboard}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded transition"
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded transition"
           >
             Copiar
           </button>
         </div>
       </div>
 
-      {/* Balance Atlasium ÚNICO */}
-      <div className="mb-6">
+      {/* Balances */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div className="bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl">
+          <p className="text-gray-300 text-sm mb-2">Balance Ethereum</p>
+          <p className="text-4xl font-bold text-blue-400">{user.ethBalance || '0'}</p>
+          <p className="text-gray-400 text-xs mt-1">ETH (Sepolia)</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-900/40 to-purple-700/40 border border-purple-500/30 p-6 rounded-xl">
           <p className="text-gray-300 text-sm mb-2">Balance Atlasium</p>
-          <p className="text-4xl font-bold text-blue-400">{user.atlBalance || '0'}</p>
+          <p className="text-4xl font-bold text-purple-400">{user.atlBalance || '0'}</p>
           <p className="text-gray-400 text-xs mt-1">ATL Tokens</p>
         </div>
       </div>
@@ -61,7 +67,6 @@ export default function Wallet() {
         >
           Actualizar Balance
         </button>
-
         <a
           href={`https://sepolia.etherscan.io/address/${user.walletAddress}`}
           target="_blank"
@@ -78,7 +83,7 @@ export default function Wallet() {
         <p className="text-gray-400 text-sm mb-4">
           Crea eventos, gestiona cobros y staff con tu propia wallet temporal.
         </p>
-
+        
         {myEvents.length > 0 && (
           <div className="mb-4 space-y-2">
             <h3 className="text-sm font-medium text-gray-300">Mis Eventos:</h3>
@@ -92,9 +97,7 @@ export default function Wallet() {
                 className="w-full flex items-center justify-between bg-black/40 hover:bg-black/60 p-3 rounded-lg border border-neutral-800 transition group"
               >
                 <span className="font-medium text-white">{event.name}</span>
-                <span className="text-xs text-gray-500 group-hover:text-purple-400 transition">
-                  Gestionar →
-                </span>
+                <span className="text-xs text-gray-500 group-hover:text-purple-400 transition">Gestionar →</span>
               </button>
             ))}
           </div>
@@ -102,10 +105,8 @@ export default function Wallet() {
 
         <button
           onClick={() => navigate('/create-event')}
-          className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg transition font-medium"
-        >
-          <FiPlusSquare size={18} />
-          Crear Nuevo Evento
+          className="block w-full bg-green-600 hover:bg-green-700 text-white text-center p-3 rounded-lg transition font-medium"
+        > <FiPlusSquare size={16} />Crear Nuevo Evento
         </button>
       </div>
 
