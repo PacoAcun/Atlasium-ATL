@@ -28,7 +28,6 @@ export default function CreateEvent() {
       
       const event = await createEvent(name, description, startISO, endISO);
       setCurrentEvent(event); // Seleccionar el nuevo evento automáticamente
-      alert('✅ Evento creado exitosamente!');
       navigate('/event-dashboard'); // Ir al dashboard del evento
     } catch (error) {
       alert('Error: ' + error.message);
@@ -52,7 +51,7 @@ export default function CreateEvent() {
           Genera una wallet temporal exclusiva para tu evento y comienza a cobrar en ATL.
         </p>
 
-        <form onSubmit={handleSubmit} className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-6">
+        <form onSubmit={handleSubmit} className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-6 relative z-10">
           <div>
             <label className="block text-sm text-gray-400 mb-2">Nombre del Evento</label>
             <input

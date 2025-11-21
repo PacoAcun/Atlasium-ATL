@@ -108,8 +108,18 @@ export default function Wallet() {
                 }}
                 className="w-full flex items-center justify-between bg-black/40 hover:bg-black/60 p-3 rounded-lg border border-neutral-800 transition group"
               >
-                <span className="font-medium text-white">{event.name}</span>
-                <span className="text-xs text-gray-500 group-hover:text-azulito transition">
+                <div className="flex-1 flex flex-col items-start gap-1 text-left">
+                  <span className="font-medium text-white">{event.name}</span>
+                  {new Date() > new Date(event.end_time) ? (
+                    <span className="text-[10px] bg-red-900/50 text-red-400 px-2 py-0.5 rounded border border-red-900">FINALIZADO</span>
+                  ) : (
+                    <span className="text-[10px] bg-green-900/50 text-green-400 px-2 py-0.5 rounded border border-green-900">ACTIVO</span>
+                  )}
+                  <p className="text-xs text-gray-500">
+                    {new Date(event.start_time).toLocaleDateString()} - {new Date(event.end_time).toLocaleDateString()}
+                  </p>
+                </div>
+                <span className="text-xs text-gray-500 group-hover:text-azulito transition ml-4">
                   Gestionar →
                 </span>
               </button>
@@ -126,6 +136,13 @@ export default function Wallet() {
         </button>
       </div>
 
+      {/* Info Card */}
+      <div className="bg-yellow-900/20 border border-yellow-600/30 p-4 rounded-lg">
+        <p className="text-yellow-200 text-sm">
+          <strong>Red de prueba:</strong> Esta wallet funciona en Sepolia Testnet. 
+          Los ETH y tokens no tienen valor real.
+        </p>
+      </div>
     </LayoutResponsive>
   );
 }

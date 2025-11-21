@@ -54,7 +54,7 @@ return (
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">
-            Auditoría: {currentEvent.name}
+            Transacciones: {currentEvent.name}
           </h1>
           <p className="text-gray-400 text-sm font-mono mt-1">
             {currentEvent.wallet_address}

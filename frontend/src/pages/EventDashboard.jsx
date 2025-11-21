@@ -12,6 +12,7 @@ export default function EventDashboard() {
   const [paymentStatus, setPaymentStatus] = useState('waiting'); // waiting, success
   const [staffEmail, setStaffEmail] = useState('');
   const [transactions, setTransactions] = useState([]);
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
   useEffect(() => {
     if (currentEvent) {
@@ -94,24 +95,49 @@ export default function EventDashboard() {
 
   const isEventEnded = currentEvent && new Date() > new Date(currentEvent.end_time);
 
-  const handleCreateStaticQR = async () => {
-    const name = prompt("Nombre del producto (ej. Refresco):");
-    if (!name) return;
-    const price = prompt("Precio en ATL:");
-    if (!price) return;
+
+
+  const handleCreateStaticQR = () => {
+    if (!amount || parseFloat(amount) <= 0) {
+      alert("Por favor ingresa un monto válido primero.");
+      return;
+    }
+    setConfirmModalOpen(true);
+  };
+
+  const confirmCreateStaticQR = async () => {
+    const name = "Cobro Rápido"; // Nombre genérico para evitar redundancia visual
 
     try {
       const { data, error } = await supabase.functions.invoke('create-static-qr', {
-        body: { eventId: currentEvent.id, name, amount: parseFloat(price) }
+        body: { eventId: currentEvent.id, name, amount: parseFloat(amount) }
       });
       
       if (error || !data.success) throw new Error(data?.error || error?.message);
       
-      alert('✅ QR Estático creado!');
-      // Recargar evento para ver el nuevo QR
+      setAmount(''); 
+      setConfirmModalOpen(false);
       await selectEvent(currentEvent.id); 
     } catch (err) {
       alert('Error: ' + err.message);
+      setConfirmModalOpen(false);
+    }
+  };
+
+  const handleDeleteStaticQR = async (qrId, e) => {
+    e.stopPropagation();
+    if (!confirm('¿Estás seguro de borrar este QR?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('static_qrs')
+        .delete()
+        .eq('id', qrId);
+
+      if (error) throw error;
+      await selectEvent(currentEvent.id);
+    } catch (err) {
+      alert('Error al borrar: ' + err.message);
     }
   };
 
@@ -125,13 +151,16 @@ export default function EventDashboard() {
             <p className="text-xs text-gray-400">
               {isEventEnded ? <span className="text-red-500 font-bold">EVENTO FINALIZADO</span> : 'En Curso'} • {currentEvent.userRole}
             </p>
+            <p className="text-xs text-gray-500 mt-1">
+              {new Date(currentEvent.start_time).toLocaleString()} - {new Date(currentEvent.end_time).toLocaleString()}
+            </p>
           </div>
           <div className="text-right">
             <p className="text-xs text-gray-400">Balance Total</p>
             <p className="text-xl font-bold text-purple-400">{currentEvent.balance} ATL</p>
             {currentEvent.userRole === 'admin' && (
-              <Link to="/event-audit" className="text-xs text-blue-400 hover:text-blue-300 mt-1 block">
-                Ver Auditoría
+              <Link to="/event-audit" className="text-sm text-blue-400 hover:text-white">
+                Ver Transacciones
               </Link>
             )}
           </div>
@@ -162,7 +191,7 @@ export default function EventDashboard() {
               
               {/* Display Amount */}
               <div className="w-full bg-black border border-neutral-700 rounded-2xl p-6 mb-6 text-right">
-                <span className="text-gray-500 text-2xl mr-2">Q</span>
+                <span className="text-gray-500 text-2xl mr-2">ATL</span>
                 <span className="text-5xl font-bold text-white">{amount || '0'}</span>
               </div>
 
@@ -183,41 +212,53 @@ export default function EventDashboard() {
                 ))}
               </div>
 
-              {/* Action Button */}
-              <button
-                onClick={generateQR}
-                disabled={!amount}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-xl text-xl transition disabled:opacity-50 mb-8"
-              >
-                Generar Cobro QR
-              </button>
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 gap-4 w-full mb-8">
+                <button
+                  onClick={generateQR}
+                  disabled={!amount}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl text-lg transition disabled:opacity-50"
+                >
+                  Generar Cobro
+                </button>
+                <button
+                  onClick={handleCreateStaticQR}
+                  disabled={!amount}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl text-lg transition disabled:opacity-50"
+                >
+                  Crear Fijo
+                </button>
+              </div>
 
               {/* Static QRs Section */}
               <div className="w-full border-t border-neutral-800 pt-6 mb-8">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-white font-bold">QRs Fijos</h3>
-                  <button 
-                    onClick={handleCreateStaticQR}
-                    className="text-xs bg-neutral-800 hover:bg-neutral-700 text-white px-3 py-1 rounded"
-                  >
-                    + Crear Nuevo
-                  </button>
+                  <h3 className="text-white font-bold">QRs Fijos Existentes</h3>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-3">
                   {currentEvent.staticQrs?.map(qr => (
-                    <div key={qr.id} className="bg-neutral-900 p-3 rounded-xl border border-neutral-800 text-center cursor-pointer hover:border-blue-500 transition"
+                    <div key={qr.id} className="relative bg-neutral-900 p-4 rounded-xl border border-neutral-800 text-center cursor-pointer hover:border-blue-500 transition group"
                          onClick={() => {
                            setAmount(qr.amount.toString());
-                           // Opcional: Auto generar
                          }}>
-                      <p className="text-white font-bold">{qr.name}</p>
-                      <p className="text-blue-400 text-sm">{qr.amount} ATL</p>
+                      
+                      {/* Delete Button */}
                       <button 
-                        className="mt-2 text-xs text-gray-500 underline"
+                        onClick={(e) => handleDeleteStaticQR(qr.id, e)}
+                        className="absolute top-2 right-2 text-gray-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"
+                        title="Borrar QR"
+                      >
+                        ✕
+                      </button>
+
+                      <p className="text-white font-bold text-xl">{qr.amount} ATL</p>
+                      <p className="text-gray-500 text-xs mt-1">Cobro Rápido</p>
+                      
+                      <button 
+                        className="mt-3 text-xs text-blue-400 underline"
                         onClick={(e) => {
                           e.stopPropagation();
-                          // Mostrar QR estático en modal (podríamos reusar el modal existente)
                           setAmount(qr.amount.toString());
                           setShowQR(true);
                         }}
@@ -227,10 +268,11 @@ export default function EventDashboard() {
                     </div>
                   ))}
                   {(!currentEvent.staticQrs || currentEvent.staticQrs.length === 0) && (
-                    <p className="text-gray-500 text-xs col-span-2 text-center">No hay productos fijos aún.</p>
+                    <p className="text-gray-500 text-xs col-span-2 text-center">No hay cobros fijos creados.</p>
                   )}
                 </div>
               </div>
+
 
               {/* Staff Management (Admin Only) */}
               {currentEvent.userRole === 'admin' && (
@@ -260,19 +302,34 @@ export default function EventDashboard() {
         {/* Transaction History (Always visible or only active? User said "se borren todos los qr... solo salga un boton retirar", implying history might be hidden or secondary. Keeping it hidden in ended state for simplicity based on "solo salga un boton") */}
         {/* Actually, user said "solo salga un boton que diga retirar". So I will hide history in ended state too. */}
         
-        {!isEventEnded && (
-          <div className="p-4 border-t border-neutral-800 pb-20">
-            <h3 className="text-sm font-bold text-gray-400 mb-4">Historial Reciente</h3>
-            {/* ... (Existing transaction list code) ... */}
-            {transactions.slice(0, 3).map((tx) => (
-               <div key={tx.uniqueId} className="text-gray-500 text-xs mb-1">
-                 {tx.to === currentEvent.wallet_address ? '+' : '-'}{parseFloat(tx.value).toFixed(2)} ATL
-               </div>
-            ))}
-            <Link to="/event-audit" className="text-center block text-blue-500 text-sm mt-2">Ver todo el historial</Link>
-          </div>
-        )}
+
       </div>
+
+      {/* Confirmation Modal for Static QR */}
+      {confirmModalOpen && (
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 max-w-sm w-full text-center">
+            <h3 className="text-xl font-bold text-white mb-2">¿Crear Cobro Fijo?</h3>
+            <p className="text-gray-400 mb-6">
+              Se creará un botón de acceso rápido para cobrar <span className="text-white font-bold">{amount} ATL</span>.
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <button 
+                onClick={() => setConfirmModalOpen(false)}
+                className="bg-neutral-800 hover:bg-neutral-700 text-white py-3 rounded-xl font-semibold"
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={confirmCreateStaticQR}
+                className="bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl font-bold"
+              >
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* QR Modal */}
       {showQR && (
