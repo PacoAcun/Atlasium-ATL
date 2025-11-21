@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { EventContext } from "../context/EventContext";
 import { FiPlusSquare } from "react-icons/fi";
+import { FiCopy } from "react-icons/fi";
+
 
 export default function Wallet() {
   const { user, refreshBalance } = useContext(AuthContext);
@@ -54,19 +56,21 @@ export default function Wallet() {
       {/* Wallet Address Card */}
       <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl mb-6">
         <h2 className="text-lg font-semibold mb-3">Dirección de Wallet</h2>
+
         <div className="flex items-center gap-3">
           <p className="flex-1 font-mono text-sm bg-black border border-neutral-700 p-3 rounded break-all">
             {user.walletAddress}
           </p>
+
+          {/* BOTÓN SOLO ICONO */}
           <button
             onClick={copyToClipboard}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded transition"
+            className="p-2 rounded hover:bg-neutral-800 transition text-gray-300 hover:text-white"
           >
-            Copiar
+            <FiCopy size={20} />
           </button>
         </div>
       </div>
-
 
 
 
