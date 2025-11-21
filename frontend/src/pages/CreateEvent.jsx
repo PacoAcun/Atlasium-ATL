@@ -16,7 +16,7 @@ export default function CreateEvent() {
     e.preventDefault();
     
     if (new Date(endTime) <= new Date(startTime)) {
-      alert('❌ La fecha de fin debe ser posterior a la de inicio');
+      alert('La fecha de fin debe ser posterior a la de inicio');
       return;
     }
 
@@ -38,27 +38,27 @@ export default function CreateEvent() {
 
   return (
     <LayoutResponsive>
-      <div className="max-w-md mx-auto mt-10">
+      <div className="mx-auto">
         <button 
           onClick={() => navigate('/wallet')}
-          className="mb-6 text-gray-400 hover:text-white flex items-center gap-2"
+          className="mb-2 text-gray-400 hover:text-white flex items-center gap-2"
         >
           ← Volver a Wallet
         </button>
 
-        <h1 className="text-3xl font-bold mb-6 text-white">Crear Nuevo Evento</h1>
-        <p className="text-gray-400 mb-8">
+        <h1 className="text-2xl font-bold mb-2 text-white">Crear Nuevo Evento</h1>
+        <p className="text-gray-400 mb-4 text-sm">
           Genera una wallet temporal exclusiva para tu evento y comienza a cobrar en ATL.
         </p>
 
-        <form onSubmit={handleSubmit} className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-6 relative z-10">
+        <form onSubmit={handleSubmit} className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 space-y-4 relative z-10">
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Nombre del Evento</label>
+            <label className="block text-sm text-gray-400 mb-1">Nombre del Evento</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-blue-500 focus:outline-none"
+              className="w-full bg-black border border-neutral-700 rounded-lg p-2.5 text-white focus:border-blue-500 focus:outline-none"
               placeholder="Ej. Tacos Don Paco"
               required
             />
@@ -66,53 +66,44 @@ export default function CreateEvent() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-2">Inicio</label>
+              <label className="block text-sm text-gray-400 mb-1">Inicio</label>
               <input
                 type="datetime-local"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-blue-500 focus:outline-none"
+                className="w-full bg-black border border-neutral-700 rounded-lg p-2.5 text-white focus:border-blue-500 focus:outline-none"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-2">Fin</label>
+              <label className="block text-sm text-gray-400 mb-1">Fin</label>
               <input
                 type="datetime-local"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-blue-500 focus:outline-none"
+                className="w-full bg-black border border-neutral-700 rounded-lg p-2.5 text-white focus:border-blue-500 focus:outline-none"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Descripción (Opcional)</label>
+            <label className="block text-sm text-gray-400 mb-1">Descripción (Opcional)</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-blue-500 focus:outline-none h-24"
+              className="w-full bg-black border border-neutral-700 rounded-lg p-2.5 text-white focus:border-blue-500 focus:outline-none h-20"
               placeholder="Venta de comida para el festival..."
             />
           </div>
 
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={() => navigate('/wallet')}
-              className="flex-1 bg-neutral-800 hover:bg-neutral-700 text-white font-medium py-4 rounded-xl transition"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-bold py-4 rounded-xl transition disabled:opacity-50"
-            >
-              {loading ? 'Creando...' : 'Crear Evento'}
-            </button>
-          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-bold py-3 rounded-xl transition disabled:opacity-50"
+          >
+            {loading ? 'Creando...' : 'Crear Evento'}
+          </button>
         </form>
       </div>
     </LayoutResponsive>

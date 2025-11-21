@@ -69,7 +69,7 @@ serve(async (req) => {
     // Por simplicidad, asumimos que el usuario tiene ETH (del registro inicial o topup de gas).
     
     const tx = await contract.transfer(toAddress, amountWei);
-    await tx.wait();
+    // await tx.wait(); // OPTIMIZATION: Don't wait for mining to make UI faster
 
     // 6. Registrar transacción en DB
     const { error: txError } = await supabase
@@ -78,8 +78,8 @@ serve(async (req) => {
         user_id: user.id,
         tx_hash: tx.hash,
         amount: amount,
-        tx_type: 'transfer', // 'transfer' para pagos P2P/Eventos
-        status: 'completed',
+        tx_type: 'transfer',
+        status: 'pending', // Changed from 'completed' since we aren't waiting
         from_address: walletData.wallet_address,
         to_address: toAddress
       });

@@ -1,10 +1,38 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import LayoutResponsive from '../layout/LayoutResponsive';
 import LoadingScreen from '../components/ui/LoadingScreen';
+import { supabase } from '../lib/supabase';
+import { FiArrowDownLeft, FiArrowUpRight } from 'react-icons/fi';
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
+  const [recentTransactions, setRecentTransactions] = useState([]);
+  const [loadingTx, setLoadingTx] = useState(true);
+
+  useEffect(() => {
+    if (user?.walletAddress) {
+      fetchRecentTransactions();
+    }
+  }, [user]);
+
+  const fetchRecentTransactions = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('get-transactions', {
+        body: {} // No body needed for user history
+      });
+
+      if (error) throw error;
+      if (!data.success) throw new Error(data.error);
+
+      // Alchemy returns 'transfers' array. We take top 5.
+      setRecentTransactions(data.transactions.slice(0, 5) || []);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    } finally {
+      setLoadingTx(false);
+    }
+  };
 
   if (!user) {
     return <LoadingScreen text="Cargando Inicio..." />;
@@ -41,17 +69,49 @@ export default function Dashboard() {
       {/* Info Card */}
       <div className="bg-yellow-900/20 border border-yellow-600/30 p-4 rounded-lg">
         <p className="text-yellow-200 text-sm">
-          ⚠️ <strong>Red de prueba:</strong> Esta wallet funciona en Sepolia Testnet. 
+          <strong>Red de prueba:</strong> Esta wallet funciona en Sepolia Testnet. 
           Los ETH y tokens no tienen valor real.
         </p>
       </div>
 
       <div className="mt-6 bg-neutral-900 border border-neutral-700 p-6 rounded-xl">
         <h2 className="text-lg font-semibold mb-4">Actividad Reciente</h2>
-        <div className="text-center py-8 text-gray-500 text-sm">
-          No hay transacciones recientes
-        </div>
-        <a href="/history" className="block text-center text-blue text-sm hover:text-blue mt-2">
+        
+        {loadingTx ? (
+          <div className="text-center py-8 text-gray-500 text-sm">Cargando actividad...</div>
+        ) : recentTransactions.length === 0 ? (
+          <div className="text-center py-8 text-gray-500 text-sm">
+            No hay transacciones recientes
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {recentTransactions.map((tx) => {
+              const isIncoming = tx.to?.toLowerCase() === user.walletAddress?.toLowerCase();
+              return (
+                <div key={tx.hash} className="flex items-center justify-between p-3 bg-black/40 rounded-lg border border-neutral-800">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-full ${isIncoming ? 'bg-blue-500/20 text-blue-400' : 'bg-red-500/20 text-red-400'}`}>
+                      {isIncoming ? <FiArrowDownLeft size={18} /> : <FiArrowUpRight size={18} />}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-white">
+                        {isIncoming ? 'Recibido' : 'Enviado'}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(tx.metadata.blockTimestamp).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  <span className={`font-bold ${isIncoming ? 'text-blue-400' : 'text-red-400'}`}>
+                    {isIncoming ? '+' : '-'}{tx.value} ATL
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <a href="/history" className="block text-center text-blue-400 text-sm hover:text-blue-300 mt-4">
           Ver todo el historial →
         </a>
       </div>

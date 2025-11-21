@@ -10,7 +10,7 @@ export default function ScanPay() {
   const navigate = useNavigate();
   const { refreshBalance } = useContext(AuthContext);
   
-  // Modes: 'select', 'scan', 'manual', 'confirm'
+  // Modes: 'select', 'scan', 'manual', 'confirm', 'success'
   const [mode, setMode] = useState('select');
   
   const [scannedData, setScannedData] = useState(null);
@@ -18,6 +18,7 @@ export default function ScanPay() {
   const [amount, setAmount] = useState("");
   const [manualAddress, setManualAddress] = useState("");
   const [processing, setProcessing] = useState(false);
+  const [txHash, setTxHash] = useState("");
 
   const handleScan = (result) => {
     if (result && result[0]) {
@@ -65,8 +66,8 @@ export default function ScanPay() {
       if (!data.success) throw new Error(data.error);
 
       await refreshBalance();
-      alert("Pago Exitoso! Hash: " + data.txHash.slice(0, 10) + "...");
-      navigate("/dashboard");
+      setTxHash(data.txHash);
+      setMode('success');
     } catch (error) {
       console.error('Payment error:', error);
       alert("Error en el pago: " + error.message);
@@ -81,6 +82,7 @@ export default function ScanPay() {
     setParsedData(null);
     setAmount("");
     setManualAddress("");
+    setTxHash("");
   };
 
   return (
@@ -160,7 +162,7 @@ export default function ScanPay() {
           <button
             onClick={handleManualSubmit}
             disabled={!manualAddress || manualAddress.length < 40}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg transition disabled:opacity-50"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition disabled:opacity-50"
           >
             Continuar
           </button>
@@ -212,6 +214,32 @@ export default function ScanPay() {
             className="w-full mt-3 text-gray-400 text-sm hover:text-white"
           >
             Cancelar
+          </button>
+        </div>
+      )}
+
+      {/* MODE: SUCCESS */}
+      {mode === 'success' && (
+        <div className="bg-neutral-900 border border-neutral-800 p-8 rounded-xl text-center">
+          <div className="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          
+          <h2 className="text-2xl font-bold text-white mb-2">¡Transacción Exitosa!</h2>
+          <p className="text-gray-400 mb-6">Tu pago se ha procesado correctamente.</p>
+          
+          <div className="bg-black p-4 rounded-lg mb-6 text-left">
+            <p className="text-xs text-gray-500 mb-1">Hash de transacción:</p>
+            <p className="font-mono text-xs text-blue-400 break-all">{txHash}</p>
+          </div>
+
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition"
+          >
+            Volver al Inicio
           </button>
         </div>
       )}
