@@ -51,6 +51,32 @@ export default function Wallet() {
         <p className="text-gray-400 text-xs mt-1">ATL Tokens</p>
       </div>
 
+
+
+
+           <div className="mt-8 bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+              </div>
+      
+              <h2 className="text-xl font-semibold mb-2 text-gray-200">Balance Disponible</h2>
+              
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-bold text-blue-400">
+                  {user.balances?.atl || '0'}
+                </span>
+                <span className="text-xl font-medium text-blue-400">ATL</span>
+              </div>
+      
+              <p className="text-sm text-gray-400 mt-1 mb-6">
+                Atlasium Token
+              </p>
+      
+            </div>
+
+
+
+
+
       {/* Action Buttons */}
       <div className="flex gap-3 mb-6">
         <button
