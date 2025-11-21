@@ -1,6 +1,5 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { getATLBalance } from '../_shared/tokenService.ts';
 import { config } from '../_shared/config.ts';
 
 const corsHeaders = {
@@ -26,10 +25,12 @@ serve(async (req) => {
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) throw new Error('Invalid token');
 
-    const { eventId } = await req.json();
-    if (!eventId) throw new Error('Event ID is required');
+    const { eventId, name, amount } = await req.json();
 
-    // 1. Verificar membresía
+    if (!eventId || !name || !amount) throw new Error('Missing required fields');
+
+    // 1. Verificar membresía (solo admin o staff pueden crear QRs?)
+    // Asumimos que staff también puede crear QRs de cobro rápido
     const { data: member, error: memberError } = await supabase
       .from('event_members')
       .select('role')
@@ -39,35 +40,21 @@ serve(async (req) => {
 
     if (memberError || !member) throw new Error('Access denied');
 
-    // 2. Obtener detalles del evento
-    const { data: event, error: eventError } = await supabase
-      .from('events')
-      .select('*')
-      .eq('id', eventId)
+    // 2. Insertar QR estático
+    const { data: qr, error: qrError } = await supabase
+      .from('static_qrs')
+      .insert({
+        event_id: eventId,
+        name,
+        amount
+      })
+      .select()
       .single();
 
-    if (eventError) throw eventError;
-
-    // 3. Obtener QRs estáticos
-    const { data: staticQrs, error: qrError } = await supabase
-      .from('static_qrs')
-      .select('*')
-      .eq('event_id', eventId)
-      .order('created_at', { ascending: false });
-
-    // 4. Obtener balance actual de la wallet del evento
-    const balance = await getATLBalance(event.wallet_address);
+    if (qrError) throw qrError;
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        event: {
-          ...event,
-          balance, // Agregar balance al objeto evento
-          userRole: member.role,
-          staticQrs: staticQrs || []
-        }
-      }),
+      JSON.stringify({ success: true, qr }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
@@ -75,7 +62,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Get Event error:', error);
+    console.error('Create Static QR error:', error);
     return new Response(
       JSON.stringify({ success: false, error: error.message }),
       {

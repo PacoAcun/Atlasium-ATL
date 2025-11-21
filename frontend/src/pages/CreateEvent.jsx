@@ -8,13 +8,25 @@ export default function CreateEvent() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (new Date(endTime) <= new Date(startTime)) {
+      alert('❌ La fecha de fin debe ser posterior a la de inicio');
+      return;
+    }
+
     setLoading(true);
     try {
-      const event = await createEvent(name, description);
+      // Convertir a ISO string (UTC) para asegurar consistencia
+      const startISO = new Date(startTime).toISOString();
+      const endISO = new Date(endTime).toISOString();
+      
+      const event = await createEvent(name, description, startISO, endISO);
       setCurrentEvent(event); // Seleccionar el nuevo evento automáticamente
       alert('✅ Evento creado exitosamente!');
       navigate('/event-dashboard'); // Ir al dashboard del evento
@@ -51,6 +63,29 @@ export default function CreateEvent() {
               placeholder="Ej. Tacos Don Paco"
               required
             />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">Inicio</label>
+              <input
+                type="datetime-local"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-purple-500 focus:outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">Fin</label>
+              <input
+                type="datetime-local"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-purple-500 focus:outline-none"
+                required
+              />
+            </div>
           </div>
 
           <div>

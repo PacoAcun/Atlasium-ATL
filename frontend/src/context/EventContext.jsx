@@ -45,10 +45,10 @@ export function EventProvider({ children }) {
     }
   }
 
-  async function createEvent(name, description) {
+  async function createEvent(name, description, startTime, endTime) {
     try {
       const { data, error } = await supabase.functions.invoke('create-event', {
-        body: { name, description }
+        body: { name, description, startTime, endTime }
       });
 
       if (error) throw error;

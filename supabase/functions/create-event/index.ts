@@ -41,9 +41,10 @@ serve(async (req) => {
     const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
     if (authError || !user) throw new Error('Invalid token');
 
-    const { name, description } = await req.json();
+    const { name, description, startTime, endTime } = await req.json();
 
     if (!name) throw new Error('Event name is required');
+    if (!startTime || !endTime) throw new Error('Start and End times are required');
 
     // 2. Cliente Admin para base de datos (Bypass RLS)
     const supabaseAdmin = createClient(
@@ -61,6 +62,8 @@ serve(async (req) => {
       .insert({
         name,
         description,
+        start_time: startTime,
+        end_time: endTime,
         wallet_address: wallet.address,
         encrypted_private_key: encryptedKey,
         created_by: user.id
