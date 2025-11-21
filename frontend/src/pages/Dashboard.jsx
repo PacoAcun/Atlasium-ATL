@@ -40,7 +40,7 @@ export default function Dashboard() {
 
   return (
     <LayoutResponsive>
-      <h1 className="text-3xl font-bold mb-4 mt-10">Hola, {user?.name}</h1>
+      <h1 className="text-3xl font-bold mb-2 mt-10">Hola, {user?.name}</h1>
 
       <p className="text-gray-400">
         Bienvenido a tu espacio en Atlasium.

@@ -88,7 +88,7 @@ export default function ScanPay() {
 
   return (
     <LayoutResponsive>
-      <h1 className="text-2xl font-bold mb-6 mt-10">Métodos de Pago</h1>
+      <h1 className="text-3xl font-bold mb-6 mt-10">Métodos de Pago</h1>
 
       {/* MODE: SELECT */}
       {mode === 'select' && (
