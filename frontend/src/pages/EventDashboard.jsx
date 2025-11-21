@@ -13,6 +13,8 @@ export default function EventDashboard() {
   const [staffEmail, setStaffEmail] = useState('');
   const [transactions, setTransactions] = useState([]);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [qrToDelete, setQrToDelete] = useState(null);
 
   useEffect(() => {
     if (currentEvent) {
@@ -97,6 +99,8 @@ export default function EventDashboard() {
 
 
 
+
+
   const handleCreateStaticQR = () => {
     if (!amount || parseFloat(amount) <= 0) {
       alert("Por favor ingresa un monto válido primero.");
@@ -124,22 +128,32 @@ export default function EventDashboard() {
     }
   };
 
-  const handleDeleteStaticQR = async (qrId, e) => {
+  const handleDeleteStaticQR = (qrId, e) => {
     e.stopPropagation();
-    if (!confirm('¿Estás seguro de borrar este QR?')) return;
+    setQrToDelete(qrId);
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDeleteStaticQR = async () => {
+    if (!qrToDelete) return;
 
     try {
       const { error } = await supabase
         .from('static_qrs')
         .delete()
-        .eq('id', qrId);
+        .eq('id', qrToDelete);
 
       if (error) throw error;
       await selectEvent(currentEvent.id);
+      setDeleteModalOpen(false);
+      setQrToDelete(null);
     } catch (err) {
       alert('Error al borrar: ' + err.message);
+      setDeleteModalOpen(false);
     }
   };
+
+
 
   return (
     <LayoutResponsive>
@@ -363,6 +377,31 @@ export default function EventDashboard() {
                 </p>
               </>
             )}
+          </div>
+        </div>
+      )}
+      {/* Modal de Confirmación de Borrado */}
+      {deleteModalOpen && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+            <h3 className="text-xl font-bold text-white mb-4">¿Eliminar QR?</h3>
+            <p className="text-gray-400 mb-6">
+              Esta acción no se puede deshacer. El código QR dejará de funcionar inmediatamente.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setDeleteModalOpen(false)}
+                className="flex-1 bg-neutral-800 hover:bg-neutral-700 text-white py-3 rounded-xl font-medium transition"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmDeleteStaticQR}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold transition"
+              >
+                Eliminar
+              </button>
+            </div>
           </div>
         </div>
       )}
