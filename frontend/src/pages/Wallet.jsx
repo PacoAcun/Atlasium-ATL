@@ -1,11 +1,10 @@
-import LayoutResponsive from "../layout/LayoutResponsive";
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import { EventContext } from "../context/EventContext";
-import { FiPlusSquare } from "react-icons/fi";
-import { FiCopy } from "react-icons/fi";
-
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FiCopy, FiPlusSquare } from 'react-icons/fi';
+import { AuthContext } from '../context/AuthContext';
+import { EventContext } from '../context/EventContext';
+import LayoutResponsive from '../layout/LayoutResponsive';
+import LoadingScreen from '../components/ui/LoadingScreen';
 
 export default function Wallet() {
   const { user, refreshBalance } = useContext(AuthContext);
@@ -13,11 +12,7 @@ export default function Wallet() {
   const navigate = useNavigate();
 
   if (!user) {
-    return (
-      <div className="h-screen w-full flex items-center justify-center text-gray-300">
-        Cargando...
-      </div>
-    );
+    return <LoadingScreen text="Cargando Billetera..." />;
   }
 
   const copyToClipboard = () => {
@@ -31,25 +26,23 @@ export default function Wallet() {
       <p className="text-gray-400 mb-6">Gestiona tu wallet Ethereum en Sepolia</p>
 
       {/* Balances */}
+      <div className="mb-3 mt-8 bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-10">
+        </div>
 
-           <div className="mb-3 mt-8 bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-              </div>
-      
-              <h2 className="text-m font-semibold mb-2 text-gray-200">Balance Disponible</h2>
-              
-              <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-blue-400">
-                  {user.balances?.atl || '0'}
-                </span>
-                <span className="text-xl font-medium text-blue-400">ATL</span>
-              </div>
-      
-              <p className="text-sm text-gray-400 mt-1 mb-6">
-                Atlasium Token
-              </p>
-            </div>
+        <h2 className="text-m font-semibold mb-2 text-gray-200">Balance Disponible</h2>
+        
+        <div className="flex items-baseline gap-2">
+          <span className="text-4xl font-bold text-blue-400">
+            {user.balances?.atl || '0'}
+          </span>
+          <span className="text-xl font-medium text-blue-400">ATL</span>
+        </div>
 
+        <p className="text-sm text-gray-400 mt-1 mb-6">
+          Atlasium Token
+        </p>
+      </div>
 
       {/* Wallet Address Card */}
       <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl mb-3">
@@ -69,7 +62,6 @@ export default function Wallet() {
           </button>
         </div>
       </div>
-
 
       {/* Action Buttons */}
       <div className="flex gap-3 mb-6">

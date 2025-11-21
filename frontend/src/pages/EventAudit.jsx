@@ -3,6 +3,7 @@ import { EventContext } from '../context/EventContext';
 import { supabase } from '../lib/supabase';
 import LayoutResponsive from '../layout/LayoutResponsive';
 import { FiArrowDownLeft, FiArrowUpRight, FiClock } from 'react-icons/fi';
+import LoadingScreen from '../components/ui/LoadingScreen';
 
 export default function EventAudit() {
   const { currentEvent, loadingEvent } = useContext(EventContext);
@@ -13,6 +14,28 @@ export default function EventAudit() {
   useEffect(() => {
     if (currentEvent) {
       loadHistory();
+
+      // Realtime Listener for new transactions
+      const channel = supabase
+        .channel('event-audit-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'transactions',
+            filter: `to_address=eq.${currentEvent.wallet_address}`,
+          },
+          (payload) => {
+            console.log('New transaction in audit!', payload);
+            loadHistory();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [currentEvent]);
 
@@ -37,20 +60,18 @@ export default function EventAudit() {
       setTotalSales(sales);
 
     } catch (error) {
-      console.error('Error loading history:', error);
+      console.error("Error loading history:", error);
     } finally {
       setLoading(false);
     }
   }
 
   if (loadingEvent || !currentEvent) {
-    return <div className="p-10 text-center text-white">Cargando Evento...</div>;
+    return <LoadingScreen text="Cargando Auditoría..." />;
   }
-return (
-  <LayoutResponsive>
-    <div className="max-w-4xl mx-auto">
-      
-      {/* HEADER AUDITORÍA + VENTAS (RESPONSIVE) */}
+
+  return (
+    <LayoutResponsive>
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">
@@ -145,8 +166,6 @@ return (
           </div>
         )}
       </div>
-
-    </div>
-  </LayoutResponsive>
-);
+    </LayoutResponsive>
+  );
 }

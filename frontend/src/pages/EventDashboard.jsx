@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import LayoutResponsive from '../layout/LayoutResponsive';
 import { QRCodeSVG } from 'qrcode.react';
 import { Link } from 'react-router-dom';
+import LoadingScreen from '../components/ui/LoadingScreen';
 
 export default function EventDashboard() {
   const { currentEvent, loadingEvent, inviteStaff, selectEvent } = useContext(EventContext);
@@ -35,12 +36,12 @@ export default function EventDashboard() {
     }
   }
 
-  // Realtime Listener for Payments
+  // Realtime Listener for Payments and Event Updates
   useEffect(() => {
-    if (!showQR || !currentEvent) return;
+    if (!currentEvent) return;
 
     const channel = supabase
-      .channel('table-db-changes')
+      .channel('event-dashboard-changes')
       .on(
         'postgres_changes',
         {
@@ -51,16 +52,32 @@ export default function EventDashboard() {
         },
         (payload) => {
           console.log('New transaction received!', payload);
-          // Verificar monto (opcional, por ahora asumimos que si llega es correcto o el cajero verifica)
-          if (parseFloat(payload.new.amount) >= parseFloat(amount)) {
+          
+          // 1. Update Balance & Event Data
+          selectEvent(currentEvent.id);
+
+          // 2. Handle QR Payment Success
+          if (showQR && parseFloat(payload.new.amount) >= parseFloat(amount)) {
             setPaymentStatus('success');
             setTimeout(() => {
               setShowQR(false);
               setAmount('');
               setPaymentStatus('waiting');
-              // Opcional: Recargar balance del evento
             }, 3000);
           }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'static_qrs',
+          filter: `event_id=eq.${currentEvent.id}`,
+        },
+        (payload) => {
+          console.log('Static QR change detected!', payload);
+          selectEvent(currentEvent.id);
         }
       )
       .subscribe();
@@ -68,10 +85,10 @@ export default function EventDashboard() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [showQR, currentEvent, amount]);
+  }, [currentEvent, showQR, amount]);
 
   if (loadingEvent || !currentEvent) {
-    return <div className="p-10 text-center text-white">Cargando Evento...</div>;
+    return <LoadingScreen text="Cargando Dashboard..." />;
   }
 
   const handleNumPad = (num) => {

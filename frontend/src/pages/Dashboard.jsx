@@ -1,18 +1,13 @@
-import LayoutResponsive from "../layout/LayoutResponsive";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { FiRefreshCw } from "react-icons/fi";
-
+import React, { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import LayoutResponsive from '../layout/LayoutResponsive';
+import LoadingScreen from '../components/ui/LoadingScreen';
 
 export default function Dashboard() {
-  const { user, refreshBalance } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   if (!user) {
-    return (
-      <div className="h-screen w-full flex items-center justify-center text-gray-300">
-        Cargando...
-      </div>
-    );
+    return <LoadingScreen text="Cargando Inicio..." />;
   }
 
   return (

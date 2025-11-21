@@ -1,7 +1,8 @@
-import LayoutResponsive from "../layout/LayoutResponsive";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { supabase } from "../lib/supabase";
+import React, { useState, useEffect, useContext } from 'react';
+import { supabase } from '../lib/supabase';
+import { AuthContext } from '../context/AuthContext';
+import LayoutResponsive from '../layout/LayoutResponsive';
+import LoadingScreen from '../components/ui/LoadingScreen';
 
 export default function History() {
   const { user } = useContext(AuthContext);
@@ -30,16 +31,17 @@ export default function History() {
     }
   }
 
+  if (loading) {
+    return <LoadingScreen text="Cargando Historial..." />;
+  }
+
   return (
     <LayoutResponsive>
-      <h1 className="text-2xl font-bold mb-6">Historial de Transacciones</h1>
-
-      {loading ? (
-        <div className="text-center text-gray-400 py-10">Cargando...</div>
-      ) : transactions.length === 0 ? (
-        <div className="text-center py-10 bg-neutral-900 rounded-xl border border-neutral-800">
-          <p className="text-gray-400 mb-2">No tienes transacciones aún</p>
-          <p className="text-sm text-gray-600">Tus pagos y recargas aparecerán aquí</p>
+      <h1 className="text-3xl font-bold mb-6">Historial de Transacciones</h1>
+      
+      {transactions.length === 0 ? (
+        <div className="text-center text-gray-500 py-10">
+          No hay transacciones recientes
         </div>
       ) : (
         <div className="space-y-3">
