@@ -97,7 +97,9 @@ export default function Wallet() {
                 className="w-full flex items-center justify-between bg-black/40 hover:bg-black/60 p-3 rounded-lg border border-neutral-800 transition group"
               >
                 <span className="font-medium text-white">{event.name}</span>
-                <span className="text-xs text-gray-500 group-hover:text-purple-400 transition">Gestionar →</span>
+                <span className="text-xs text-gray-500 group-hover:text-azulito transition">
+                  Gestionar →
+                </span>
               </button>
             ))}
           </div>
