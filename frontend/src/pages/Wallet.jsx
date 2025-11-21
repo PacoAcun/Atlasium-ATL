@@ -55,7 +55,7 @@ export default function Wallet() {
       <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl mb-6">
         <h2 className="text-lg font-semibold mb-3">Dirección de Wallet</h2>
         <div className="flex items-center gap-3">
-          <p className="flex-1 font-mono text-sm bg-dark p-3 rounded break-all">
+          <p className="flex-1 font-mono text-sm bg-black border border-neutral-700 p-3 rounded break-all">
             {user.walletAddress}
           </p>
           <button

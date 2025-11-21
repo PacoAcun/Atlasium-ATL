@@ -59,7 +59,7 @@ export default function CreateEvent() {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-purple-500 focus:outline-none"
+              className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-blue-500 focus:outline-none"
               placeholder="Ej. Tacos Don Paco"
               required
             />
@@ -72,7 +72,7 @@ export default function CreateEvent() {
                 type="datetime-local"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-purple-500 focus:outline-none"
+                className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-blue-500 focus:outline-none"
                 required
               />
             </div>
@@ -82,7 +82,7 @@ export default function CreateEvent() {
                 type="datetime-local"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-purple-500 focus:outline-none"
+                className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-blue-500 focus:outline-none"
                 required
               />
             </div>
@@ -93,7 +93,7 @@ export default function CreateEvent() {
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-purple-500 focus:outline-none h-24"
+              className="w-full bg-black border border-neutral-700 rounded-lg p-3 text-white focus:border-blue-500 focus:outline-none h-24"
               placeholder="Venta de comida para el festival..."
             />
           </div>
@@ -109,7 +109,7 @@ export default function CreateEvent() {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-4 rounded-xl transition disabled:opacity-50"
+              className="flex-1 bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-bold py-4 rounded-xl transition disabled:opacity-50"
             >
               {loading ? 'Creando...' : 'Crear Evento'}
             </button>
