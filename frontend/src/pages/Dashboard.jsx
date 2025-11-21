@@ -1,6 +1,8 @@
 import LayoutResponsive from "../layout/LayoutResponsive";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { FiRefreshCw } from "react-icons/fi";
+
 
 export default function Dashboard() {
   const { user, refreshBalance } = useContext(AuthContext);
