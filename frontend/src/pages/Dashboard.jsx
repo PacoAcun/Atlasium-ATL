@@ -24,33 +24,23 @@ export default function Dashboard() {
       </p>
 
       {/* Wallet Info Card */}
-     <div className="mt-8 bg-gradient-to-br from-blue to-blue-900/40 border border-blue p-6 rounded-xl relative overflow-hidden">
+
+      <div className="mb-8 mt-8 bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-4 opacity-10">
-          <svg className="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z" />
-          </svg>
         </div>
 
-        <h2 className="text-xl font-semibold mb-2 text-gray-200">Balance Disponible</h2>
-        
+        <h2 className="text-m font-semibold mb-2 text-gray-200">Balance Disponible</h2>
+
         <div className="flex items-baseline gap-2">
-          <span className="text-5xl font-bold text-white tracking-tight">
+          <span className="text-4xl font-bold text-blue-400">
             {user.balances?.atl || '0'}
           </span>
-          <span className="text-xl font-medium text-blue">ATL</span>
-            <button 
-            onClick={refreshBalance}
-            className="ml-3 flex items-center gap-1 text-gray-300 hover:text-white underline font-semibold transition"
-            >
-            <FiRefreshCw size={16} />
-            <span className="text-sm">Refrescar balance</span>
-            </button>
+          <span className="text-xl font-medium text-blue-400">ATL</span>
         </div>
 
         <p className="text-sm text-gray-400 mt-1 mb-6">
           Atlasium Token
         </p>
-
       </div>
 
       <div className="mt-6 bg-neutral-900 border border-neutral-700 p-6 rounded-xl">

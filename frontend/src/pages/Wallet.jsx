@@ -49,13 +49,12 @@ export default function Wallet() {
               <p className="text-sm text-gray-400 mt-1 mb-6">
                 Atlasium Token
               </p>
-      
             </div>
 
 
       {/* Wallet Address Card */}
       <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl mb-6">
-        <h2 className="text-lg font-semibold mb-3">Dirección de Wallet</h2>
+        <h2 className="text-m font-medium mb-3">Dirección de Wallet</h2>
 
         <div className="flex items-center gap-3">
           <p className="flex-1 font-mono text-sm bg-black border border-neutral-700 p-3 rounded break-all">
@@ -71,7 +70,6 @@ export default function Wallet() {
           </button>
         </div>
       </div>
-
 
 
       {/* Action Buttons */}
