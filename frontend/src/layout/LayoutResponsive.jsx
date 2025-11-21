@@ -61,8 +61,8 @@ export default function LayoutResponsive({ children }) {
             </Link>
 
             <Link to="/scan" className="hover:text-white flex items-center gap-3">
-              <span className="text-xl">📷</span>
-              {!collapsed && "Pagar"}
+            <FiCamera size={20} />
+            {!collapsed && "Pagar"}
             </Link>
 
             <Link to="/profile" className="hover:text-white flex items-center gap-3">
@@ -125,10 +125,8 @@ export default function LayoutResponsive({ children }) {
             <span className="text-[10px] mt-1">Recargar</span>
           </Link>
 
-          <Link to="/scan" className="flex flex-col items-center text-purple-500 hover:text-purple-400">
-            <div className="bg-purple-500/20 p-2 rounded-full -mt-4 border border-purple-500/50">
-                <FiCamera size={20} />
-            </div>
+          <Link to="/scan" className="flex flex-col items-center text-gray-400 hover:text-white">
+            <FiCamera size={20} />
             <span className="text-[10px] mt-1">Pagar</span>
           </Link>
         </nav>
