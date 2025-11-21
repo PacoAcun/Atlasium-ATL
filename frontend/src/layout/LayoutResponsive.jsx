@@ -96,7 +96,7 @@ export default function LayoutResponsive({ children }) {
       <main
         className={`
           flex-1 overflow-y-auto px-6
-          ${isMobile ? "pt-16 pb-32" : "py-10"}
+          ${isMobile ? "pt-16 pb-20" : "py-10"}
         `}
       >
         {children}

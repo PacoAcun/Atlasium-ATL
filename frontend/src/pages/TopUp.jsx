@@ -42,20 +42,20 @@ export default function TopUp() {
 
   return (
     <LayoutResponsive>
-      <div className="mt-10">
-        <h1 className="text-3xl font-bold mb-6 text-white">Recargar ATL</h1>
+      <div className="mt-2 md:mt-10">
+        <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-white">Recargar ATL</h1>
 
-        <div className="bg-neutral-900 border border-neutral-700 p-6 rounded-xl">
-          <form onSubmit={handleTopUp} className="space-y-6">
+        <div className="bg-neutral-900 border border-neutral-800 p-4 md:p-6 rounded-xl">
+          <form onSubmit={handleTopUp} className="space-y-4 md:space-y-6">
             <div>
               <label className="block text-sm text-gray-400 mb-2">Monto a comprar (Q)</label>
               <div className="relative">
-                <span className="absolute left-4 top-3.5 text-gray-500">Q</span>
+                <span className="absolute left-4 top-2.5 md:top-3.5 text-gray-500">Q</span>
                 <input
                   type="number"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full bg-black border border-neutral-700 rounded-lg p-3 pl-8 text-white focus:border-blue-500 focus:outline-none"
+                  className="w-full bg-black border border-neutral-700 rounded-lg p-2 md:p-3 pl-8 text-white focus:border-blue-500 focus:outline-none"
                   placeholder="0.00"
                   required
                   min="1"
@@ -66,13 +66,13 @@ export default function TopUp() {
               </p>
             </div>
 
-            <div className="border-t border-neutral-800 pt-6">
+            <div className="border-t border-neutral-800 pt-4">
               <h3 className="text-sm font-medium text-white mb-4">Método de Pago (Simulado)</h3>
               
               <div className="space-y-3">
                 <input
                   type="text"
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded p-3 text-sm"
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded p-2 md:p-3 text-sm"
                   placeholder="Número de Tarjeta"
                   defaultValue="4242 4242 4242 4242"
                   disabled
@@ -80,14 +80,14 @@ export default function TopUp() {
                 <div className="grid grid-cols-2 gap-3">
                   <input
                     type="text"
-                    className="bg-neutral-800 border border-neutral-700 rounded p-3 text-sm"
+                    className="bg-neutral-800 border border-neutral-700 rounded p-2 md:p-3 text-sm"
                     placeholder="MM/YY"
                     defaultValue="12/25"
                     disabled
                   />
                   <input
                     type="text"
-                    className="bg-neutral-800 border border-neutral-700 rounded p-3 text-sm"
+                    className="bg-neutral-800 border border-neutral-700 rounded p-2 md:p-3 text-sm"
                     placeholder="CVC"
                     defaultValue="123"
                     disabled
@@ -99,7 +99,7 @@ export default function TopUp() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 md:py-3 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Procesando..." : `Pagar Q${amount || '0'}`}
             </button>
