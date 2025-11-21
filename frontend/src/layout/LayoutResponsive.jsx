@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useLocation } from "react-router-dom";
-import { FiHome, FiCreditCard, FiList, FiUser, FiMenu, FiCamera, FiRefreshCw } from "react-icons/fi";
+import { FiHome, FiCreditCard, FiList, FiUser, FiMenu, FiCamera, FiRefreshCw, FiPlusSquare } from "react-icons/fi";
 
 export default function LayoutResponsive({ children }) {
   const { user, logout } = useContext(AuthContext);
@@ -63,6 +63,11 @@ export default function LayoutResponsive({ children }) {
             <Link to="/scan" className="hover:text-white flex items-center gap-3">
             <FiCamera size={20} />
             {!collapsed && "Pagar"}
+            </Link>
+
+            <Link to="/create-event" className="hover:text-white flex items-center gap-3">
+              <FiPlusSquare size={20} />
+              {!collapsed && "Crear Evento"}
             </Link>
 
             <Link to="/profile" className="hover:text-white flex items-center gap-3">
@@ -128,6 +133,11 @@ export default function LayoutResponsive({ children }) {
           <Link to="/scan" className="flex flex-col items-center text-gray-400 hover:text-white">
             <FiCamera size={20} />
             <span className="text-[10px] mt-1">Pagar</span>
+          </Link>
+
+          <Link to="/create-event" className="flex flex-col items-center text-gray-400 hover:text-white">
+            <FiPlusSquare size={20} />
+            <span className="text-[10px] mt-1">Evento</span>
           </Link>
         </nav>
       )}

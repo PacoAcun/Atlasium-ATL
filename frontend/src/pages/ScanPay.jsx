@@ -1,28 +1,61 @@
 import LayoutResponsive from "../layout/LayoutResponsive";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabase";
+import { AuthContext } from "../context/AuthContext";
 
 export default function ScanPay() {
   const navigate = useNavigate();
+  const { refreshBalance } = useContext(AuthContext);
   const [scannedData, setScannedData] = useState(null);
+  const [parsedData, setParsedData] = useState(null);
   const [amount, setAmount] = useState("");
   const [processing, setProcessing] = useState(false);
 
   const handleScan = (result) => {
     if (result && result[0]) {
-      setScannedData(result[0].rawValue);
+      const raw = result[0].rawValue;
+      setScannedData(raw);
+      
+      try {
+        // Intentar parsear JSON (formato del Event Organizer)
+        const data = JSON.parse(raw);
+        if (data.address) {
+          setParsedData(data);
+          if (data.amount) setAmount(data.amount);
+        }
+      } catch (e) {
+        // Si no es JSON, asumir que es solo la address
+        setParsedData({ address: raw });
+      }
     }
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
+    if (!parsedData?.address || !amount) return;
+    
     setProcessing(true);
-    // Simulación de pago
-    setTimeout(() => {
-      setProcessing(false);
-      alert("✅ Pago Exitoso!");
+    try {
+      const { data, error } = await supabase.functions.invoke('transfer', {
+        body: { 
+          toAddress: parsedData.address,
+          amount: amount
+        }
+      });
+
+      if (error) throw error;
+      if (!data.success) throw new Error(data.error);
+
+      await refreshBalance();
+      alert("✅ Pago Exitoso! Hash: " + data.txHash.slice(0, 10) + "...");
       navigate("/dashboard");
-    }, 2000);
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert("Error en el pago: " + error.message);
+    } finally {
+      setProcessing(false);
+    }
   };
 
   return (
@@ -47,7 +80,12 @@ export default function ScanPay() {
             </div>
             <div>
               <p className="text-sm text-gray-400">Pagando a:</p>
-              <p className="font-mono text-white text-sm break-all">{scannedData}</p>
+              <p className="font-bold text-white text-lg">
+                {parsedData?.name || 'Comercio Desconocido'}
+              </p>
+              <p className="font-mono text-gray-500 text-xs break-all">
+                {parsedData?.address || scannedData}
+              </p>
             </div>
           </div>
 
@@ -60,6 +98,7 @@ export default function ScanPay() {
               className="w-full bg-black border border-neutral-700 rounded-lg p-4 text-2xl text-white text-center focus:border-purple-500 focus:outline-none"
               placeholder="0.00"
               autoFocus
+              readOnly={!!parsedData?.amount} // Si el QR traía monto, es fijo
             />
           </div>
 
@@ -72,7 +111,11 @@ export default function ScanPay() {
           </button>
 
           <button
-            onClick={() => setScannedData(null)}
+            onClick={() => {
+              setScannedData(null);
+              setParsedData(null);
+              setAmount("");
+            }}
             className="w-full mt-3 text-gray-400 text-sm hover:text-white"
           >
             Cancelar y escanear de nuevo

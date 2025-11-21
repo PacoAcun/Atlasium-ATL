@@ -1,29 +1,94 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Home from "./pages/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { EventProvider } from "./context/EventContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import Wallet from "./pages/Wallet";
 import History from "./pages/History";
 import TopUp from "./pages/TopUp";
 import ScanPay from "./pages/ScanPay";
-import Profile from "./pages/Profile";
+import CreateEvent from "./pages/CreateEvent";
+import EventDashboard from "./pages/EventDashboard";
+import EventAudit from "./pages/EventAudit";
+import Wallet from "./pages/Wallet";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
+export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/wallet" element={<Wallet />} />
-      <Route path="/history" element={<History />} />
-      <Route path="/topup" element={<TopUp />} />
-      <Route path="/scan" element={<ScanPay />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="*" element={<Navigate to="/login" replace />} />
-    </Routes>
+    <BrowserRouter>
+      <AuthProvider>
+        <EventProvider>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/history"
+              element={
+                <ProtectedRoute>
+                  <History />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/topup"
+              element={
+                <ProtectedRoute>
+                  <TopUp />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/scan"
+              element={
+                <ProtectedRoute>
+                  <ScanPay />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/create-event"
+              element={
+                <ProtectedRoute>
+                  <CreateEvent />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/event-dashboard"
+              element={
+                <ProtectedRoute>
+                  <EventDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/event-audit"
+              element={
+                <ProtectedRoute>
+                  <EventAudit />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wallet"
+              element={
+                <ProtectedRoute>
+                  <Wallet />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </EventProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
-
-export default App;
