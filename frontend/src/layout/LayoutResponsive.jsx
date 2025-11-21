@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useLocation } from "react-router-dom";
-import { FiHome, FiCreditCard, FiList, FiUser, FiMenu } from "react-icons/fi";
+import { FiHome, FiCreditCard, FiList, FiUser, FiMenu, FiCamera, FiRefreshCw } from "react-icons/fi";
 
 export default function LayoutResponsive({ children }) {
   const { user, logout } = useContext(AuthContext);
