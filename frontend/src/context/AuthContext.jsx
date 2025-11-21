@@ -42,7 +42,16 @@ export function AuthProvider({ children }) {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        // Si el error es 400 (User not found), lo ignoramos silenciosamente
+        // porque puede ser que el usuario se esté registrando apenas.
+        // Solo lanzamos error si es otra cosa.
+        if (error.message && error.message.includes("non-2xx")) {
+           console.warn("User profile not found yet (expected during registration)");
+           return;
+        }
+        throw error;
+      }
 
       if (data.success) {
         setUser({
@@ -56,70 +65,94 @@ export function AuthProvider({ children }) {
       }
     } catch (error) {
       console.error("Error loading user profile:", error);
-      await supabase.auth.signOut();
+      // No cerramos sesión automáticamente para permitir que complete el registro
+      // await supabase.auth.signOut();
     } finally {
       setLoading(false);
     }
   }
 
-  // Registro - llama a la Edge Function custom
-  async function register(data) {
+  // Registro paso 1: Iniciar registro con OTP
+  async function signUp(email, password, metadata) {
+    console.log("Attempting signUp for:", email);
     try {
-      const { data: result, error } = await supabase.functions.invoke(
-        "register",
-        {
-          body: data,
-        }
-      );
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name: metadata.name,
+            carnet: metadata.carnet,
+          },
+        },
+      });
 
-      if (error) {
-        console.error("Supabase function error:", error);
-        console.error("Error context:", JSON.stringify(error, null, 2));
-        alert(`Error from server: ${JSON.stringify(error)}`);
-        throw error;
-      }
+      console.log("SignUp response:", { data, error });
 
-      console.log("Registration result:", result);
-
-      if (!result || !result.success) {
-        const errorMsg = result?.error || "Registration failed";
-        console.error("Registration failed:", errorMsg);
-        alert(`Registration failed: ${errorMsg}`);
-        throw new Error(errorMsg);
-      }
-
-      return result;
+      if (error) throw error;
+      return data;
     } catch (error) {
-      console.error("Registration error detail:", error);
-      const errorMessage = error.message || error.toString() || "Error during registration";
-      alert(`Error: ${errorMessage}`);
-      throw new Error(errorMessage);
+      console.error("SignUp error:", error);
+      throw error;
     }
   }
 
-  // Login - llama a la Edge Function custom
+  // Registro paso 2: Verificar OTP
+  async function verifyOtp(email, token) {
+    try {
+      const { data, error } = await supabase.auth.verifyOtp({
+        email,
+        token,
+        type: 'signup',
+      });
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error("Verify OTP error:", error);
+      throw error;
+    }
+  }
+
+  // Registro paso 3: Completar perfil y wallet
+  async function completeRegistration() {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No session found");
+
+      const { data, error } = await supabase.functions.invoke("complete-registration", {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (error) throw error;
+      if (!data.success) throw new Error(data.error || "Failed to complete registration");
+
+      // Recargar perfil
+      await loadUserProfile(session.access_token);
+      return data;
+    } catch (error) {
+      console.error("Complete registration error:", error);
+      throw error;
+    }
+  }
+
+  // Login - llama a la Edge Function custom (Legacy/Alternative)
+  // O usar supabase.auth.signInWithPassword si preferimos standard auth
   async function login(email, password) {
     try {
-      const { data, error } = await supabase.functions.invoke("login", {
-        body: { email, password },
+      // Intentar login standard primero
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
 
       if (error) throw error;
 
-      if (!data.success) {
-        throw new Error(data.error || "Login failed");
+      if (data.session) {
+        await loadUserProfile(data.session.access_token);
       }
-
-      // Establecer sesión con el token recibido
-      const { error: sessionError } = await supabase.auth.setSession({
-        access_token: data.access_token,
-        refresh_token: data.refresh_token,
-      });
-
-      if (sessionError) throw sessionError;
-
-      // Cargar perfil completo del usuario con balances
-      await loadUserProfile(data.access_token);
     } catch (error) {
       throw new Error(error.message || "Error during login");
     }
@@ -144,7 +177,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, login, register, logout, refreshBalance, loading }}
+      value={{ user, login, signUp, verifyOtp, completeRegistration, logout, refreshBalance, loading }}
     >
       {children}
     </AuthContext.Provider>
