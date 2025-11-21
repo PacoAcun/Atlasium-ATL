@@ -36,42 +36,19 @@ export default function Dashboard() {
             {user.atlBalance || '0'}
           </span>
           <span className="text-xl font-medium text-purple-400">ATL</span>
-          <button 
+            <button 
             onClick={refreshBalance}
-            className="ml-2 p-1.5 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition"
-            title="Actualizar balance"
-          >
-            🔄
-          </button>
+            className="ml-3 flex items-center gap-1 text-gray-300 hover:text-white underline font-semibold transition"
+            >
+            <FiRefreshCw size={16} />
+            <span className="text-sm">Refrescar balance</span>
+            </button>
         </div>
 
         <p className="text-sm text-gray-400 mt-1 mb-6">
           Atlasium Token
         </p>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-3 gap-3">
-          <a href="/topup" className="flex flex-col items-center gap-2 bg-white/10 hover:bg-white/20 p-3 rounded-lg transition group">
-            <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 group-hover:scale-110 transition">
-              💰
-            </div>
-            <span className="text-xs font-medium text-gray-300">Recargar</span>
-          </a>
-
-          <a href="/scan" className="flex flex-col items-center gap-2 bg-white/10 hover:bg-white/20 p-3 rounded-lg transition group">
-            <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
-              📷
-            </div>
-            <span className="text-xs font-medium text-gray-300">Pagar</span>
-          </a>
-
-          <a href="/history" className="flex flex-col items-center gap-2 bg-white/10 hover:bg-white/20 p-3 rounded-lg transition group">
-            <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition">
-              📜
-            </div>
-            <span className="text-xs font-medium text-gray-300">Historial</span>
-          </a>
-        </div>
       </div>
 
       <div className="mt-6 bg-neutral-900 border border-neutral-700 p-6 rounded-xl">
