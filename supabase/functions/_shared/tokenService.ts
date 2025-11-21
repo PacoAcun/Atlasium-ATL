@@ -80,3 +80,57 @@ export async function getATLTokenInfo() {
     return { name: 'Atlasium', symbol: 'ATL', decimals: 18 };
   }
 }
+
+/**
+ * Obtiene el historial de transferencias de ATL usando Alchemy API
+ */
+export async function getATLTransactions(walletAddress: string) {
+  const apiKey = config.sepolia.rpcUrl.split('/').pop();
+  const url = `https://eth-sepolia.g.alchemy.com/v2/${apiKey}`;
+
+  const fetchTransfers = async (params: any) => {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: 1,
+        jsonrpc: '2.0',
+        method: 'alchemy_getAssetTransfers',
+        params: [params],
+      }),
+    });
+    const data = await response.json();
+    return data.result?.transfers || [];
+  };
+
+  try {
+    const [sent, received] = await Promise.all([
+      fetchTransfers({
+        fromBlock: "0x0",
+        toBlock: "latest",
+        fromAddress: walletAddress,
+        contractAddresses: [config.sepolia.atlTokenAddress],
+        category: ["erc20"],
+        withMetadata: true
+      }),
+      fetchTransfers({
+        fromBlock: "0x0",
+        toBlock: "latest",
+        toAddress: walletAddress,
+        contractAddresses: [config.sepolia.atlTokenAddress],
+        category: ["erc20"],
+        withMetadata: true
+      })
+    ]);
+
+    // Combinar y ordenar por fecha (más reciente primero)
+    const allTransfers = [...sent, ...received].sort((a, b) => {
+      return new Date(b.metadata.blockTimestamp).getTime() - new Date(a.metadata.blockTimestamp).getTime();
+    });
+
+    return allTransfers;
+  } catch (error) {
+    console.error('Error fetching Alchemy transactions:', error);
+    return [];
+  }
+}

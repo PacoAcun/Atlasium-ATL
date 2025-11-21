@@ -81,11 +81,12 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message || 'Unauthorized',
+        error: error.message || 'Unknown error',
+        stack: error.stack, // Optional: include stack trace for debugging
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 401,
+        status: 400, // Changed from 401 to 400 to differentiate from auth failure if it's a logic error
       }
     );
   }

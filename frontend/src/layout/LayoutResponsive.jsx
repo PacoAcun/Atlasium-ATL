@@ -39,7 +39,6 @@ export default function LayoutResponsive({ children }) {
 
           {/* Título (solo si no está colapsado) */}
 
-          {/* NAV */}
           <nav className="flex flex-col gap-4 mt-4">
             <Link to="/dashboard" className="hover:text-white flex items-center gap-3">
               <FiHome size={20} />
@@ -51,9 +50,19 @@ export default function LayoutResponsive({ children }) {
               {!collapsed && "Wallet"}
             </Link>
 
-            <Link to="/transactions" className="hover:text-white flex items-center gap-3">
+            <Link to="/history" className="hover:text-white flex items-center gap-3">
               <FiList size={20} />
-              {!collapsed && "Transacciones"}
+              {!collapsed && "Historial"}
+            </Link>
+
+            <Link to="/topup" className="hover:text-white flex items-center gap-3">
+              <span className="text-xl">💰</span>
+              {!collapsed && "Recargar"}
+            </Link>
+
+            <Link to="/scan" className="hover:text-white flex items-center gap-3">
+              <span className="text-xl">📷</span>
+              {!collapsed && "Pagar"}
             </Link>
 
             <Link to="/profile" className="hover:text-white flex items-center gap-3">
@@ -91,24 +100,31 @@ export default function LayoutResponsive({ children }) {
       {isMobile && (
         <nav className="fixed bottom-0 left-0 w-full h-16 bg-dark border-t border-neutral-700 flex justify-around items-center">
 
-          <Link to="/dashboard" className="flex flex-col items-center">
-            <FiHome size={22} />
-            <span className="text-xs mt-[3px]">Home</span>
+          <Link to="/dashboard" className="flex flex-col items-center text-gray-400 hover:text-white">
+            <FiHome size={20} />
+            <span className="text-[10px] mt-1">Home</span>
           </Link>
 
-          <Link to="/wallet" className="flex flex-col items-center">
-            <FiCreditCard size={22} />
-            <span className="text-xs mt-[3px]">Wallet</span>
+          <Link to="/wallet" className="flex flex-col items-center text-gray-400 hover:text-white">
+            <FiCreditCard size={20} />
+            <span className="text-[10px] mt-1">Wallet</span>
           </Link>
 
-          <Link to="/transactions" className="flex flex-col items-center">
-            <FiList size={22} />
-            <span className="text-xs mt-[3px]">Trans</span>
+          <Link to="/scan" className="flex flex-col items-center text-purple-500 hover:text-purple-400">
+            <div className="bg-purple-500/20 p-2 rounded-full -mt-4 border border-purple-500/50">
+              <span className="text-xl">📷</span>
+            </div>
+            <span className="text-[10px] mt-1">Pagar</span>
           </Link>
 
-          <Link to="/profile" className="flex flex-col items-center">
-            <FiUser size={22} />
-            <span className="text-xs mt-[3px]">Perfil</span>
+          <Link to="/history" className="flex flex-col items-center text-gray-400 hover:text-white">
+            <FiList size={20} />
+            <span className="text-[10px] mt-1">Historial</span>
+          </Link>
+
+          <Link to="/profile" className="flex flex-col items-center text-gray-400 hover:text-white">
+            <FiUser size={20} />
+            <span className="text-[10px] mt-1">Perfil</span>
           </Link>
 
         </nav>
