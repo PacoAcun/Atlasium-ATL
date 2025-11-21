@@ -75,7 +75,7 @@ export default function ScanPay() {
       ) : (
         <div className="bg-neutral-900 border border-neutral-800 p-6 rounded-xl">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-2xl">
               🏪
             </div>
             <div>

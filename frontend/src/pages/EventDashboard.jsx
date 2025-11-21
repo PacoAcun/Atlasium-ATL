@@ -142,7 +142,7 @@ export default function EventDashboard() {
           <button
             onClick={generateQR}
             disabled={!amount}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-5 rounded-xl text-xl transition disabled:opacity-50"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-xl text-xl transition disabled:opacity-50"
           >
             Generar Cobro QR
           </button>
@@ -189,7 +189,7 @@ export default function EventDashboard() {
                   >
                     <div className="flex items-center gap-3">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
-                        isIncoming ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"
+                        isIncoming ? "bg-blue-500/20 text-blue-400" : "bg-red-500/20 text-red-400"
                       }`}>
                         {isIncoming ? "↓" : "↑"}
                       </div>
@@ -203,7 +203,7 @@ export default function EventDashboard() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className={`font-bold text-sm ${isIncoming ? "text-green-400" : "text-white"}`}>
+                      <p className={`font-bold text-sm ${isIncoming ? "text-blue-400" : "text-white"}`}>
                         {isIncoming ? "+" : "-"}{amount} ATL
                       </p>
                     </div>
@@ -229,7 +229,7 @@ export default function EventDashboard() {
             {paymentStatus === 'success' ? (
               <div className="py-10">
                 <div className="text-6xl mb-4">✅</div>
-                <h2 className="text-2xl font-bold text-green-600 mb-2">¡Pago Recibido!</h2>
+                <h2 className="text-2xl font-bold text-blue-600 mb-2">¡Pago Recibido!</h2>
                 <p className="text-gray-600">La transacción ha sido confirmada.</p>
               </div>
             ) : (

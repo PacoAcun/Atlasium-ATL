@@ -107,7 +107,7 @@ export default function Wallet() {
 
         <button
           onClick={() => navigate('/create-event')}
-          className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg transition font-medium"
+          className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition font-medium"
         >
           <FiPlusSquare size={18} />
           Crear Nuevo Evento

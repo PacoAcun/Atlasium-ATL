@@ -57,7 +57,7 @@ export default function EventAudit() {
           </div>
           <div className="text-right bg-neutral-900 p-4 rounded-xl border border-neutral-800">
             <p className="text-xs text-gray-400">Ventas Totales</p>
-            <p className="text-2xl font-bold text-green-400">+{totalSales.toFixed(2)} ATL</p>
+            <p className="text-2xl font-bold text-blue-400">+{totalSales.toFixed(2)} ATL</p>
           </div>
         </div>
 
@@ -77,7 +77,7 @@ export default function EventAudit() {
                 return (
                   <div key={tx.hash} className="p-4 flex items-center justify-between hover:bg-neutral-800/50 transition">
                     <div className="flex items-center gap-4">
-                      <div className={`p-3 rounded-full ${isIncoming ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                      <div className={`p-3 rounded-full ${isIncoming ? 'bg-blue-500/10 text-blue-500' : 'bg-red-500/10 text-red-500'}`}>
                         {isIncoming ? <FiArrowDownLeft size={20} /> : <FiArrowUpRight size={20} />}
                       </div>
                       <div>
@@ -90,7 +90,7 @@ export default function EventAudit() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className={`font-bold ${isIncoming ? 'text-green-400' : 'text-white'}`}>
+                      <p className={`font-bold ${isIncoming ? 'text-blue-400' : 'text-white'}`}>
                         {isIncoming ? '+' : '-'}{parseFloat(tx.value).toFixed(2)} ATL
                       </p>
                       <div className="flex items-center justify-end gap-1 text-xs text-gray-500 mt-1">
