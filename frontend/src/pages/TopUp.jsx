@@ -42,8 +42,7 @@ export default function TopUp() {
 
   return (
     <LayoutResponsive>
-      <div className="max-w-md mx-auto mt-10">
-        <BackButton to="/wallet" label="Volver a Wallet" />
+      <div className="mt-10">
         <h1 className="text-3xl font-bold mb-6 text-white">Comprar ATL</h1>
 
         <div className="bg-neutral-900 border border-neutral-800 p-6 rounded-xl">

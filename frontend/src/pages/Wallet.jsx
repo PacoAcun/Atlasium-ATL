@@ -26,7 +26,6 @@ export default function Wallet() {
 
   return (
     <LayoutResponsive>
-      <BackButton to="/dashboard" label="Volver al Dashboard" />
       <h1 className="text-3xl font-bold mb-2">Mi Wallet</h1>
       <p className="text-gray-400 mb-6">Gestiona tu wallet Ethereum en Sepolia</p>
 

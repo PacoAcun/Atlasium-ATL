@@ -40,7 +40,6 @@ export default function History() {
 
   return (
     <LayoutResponsive>
-      <BackButton to="/dashboard" label="Volver al Dashboard" />
       <h1 className="text-3xl font-bold mb-6">Historial de Transacciones</h1>
       
       {transactions.length === 0 ? (
