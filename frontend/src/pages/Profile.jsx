@@ -1,6 +1,8 @@
 import LayoutResponsive from "../layout/LayoutResponsive";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Profile() {
+  const { user, logout } = useContext(AuthContext);
   return (
     <LayoutResponsive>
       <h1 className="text-3xl font-bold">Perfil</h1>
@@ -15,3 +17,6 @@ export default function Profile() {
     </LayoutResponsive>
   );
 }
+
+
+
