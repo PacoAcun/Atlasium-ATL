@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { EventContext } from "../context/EventContext";
+import { FiPlusSquare } from "react-icons/fi";
 
 export default function Wallet() {
   const { user, refreshBalance } = useContext(AuthContext);
