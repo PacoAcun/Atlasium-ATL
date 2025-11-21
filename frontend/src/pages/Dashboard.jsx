@@ -43,6 +43,14 @@ export default function Dashboard() {
         </p>
       </div>
 
+      {/* Info Card */}
+      <div className="bg-yellow-900/20 border border-yellow-600/30 p-4 rounded-lg">
+        <p className="text-yellow-200 text-sm">
+          ⚠️ <strong>Red de prueba:</strong> Esta wallet funciona en Sepolia Testnet. 
+          Los ETH y tokens no tienen valor real.
+        </p>
+      </div>
+
       <div className="mt-6 bg-neutral-900 border border-neutral-700 p-6 rounded-xl">
         <h2 className="text-lg font-semibold mb-4">Actividad Reciente</h2>
         <div className="text-center py-8 text-gray-500 text-sm">
