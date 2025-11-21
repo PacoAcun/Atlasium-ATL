@@ -45,18 +45,10 @@ export default function Wallet() {
       </div>
 
       {/* Balances */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <div className="bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl">
-          <p className="text-gray-300 text-sm mb-2">Balance Ethereum</p>
-          <p className="text-4xl font-bold text-blue-400">{user.ethBalance || '0'}</p>
-          <p className="text-gray-400 text-xs mt-1">ETH (Sepolia)</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl">
-          <p className="text-gray-300 text-sm mb-2">Balance Atlasium</p>
-          <p className="text-4xl font-bold text-blue-400">{user.atlBalance || '0'}</p>
-          <p className="text-gray-400 text-xs mt-1">ATL Tokens</p>
-        </div>
+      <div className="bg-gradient-to-br from-blue-900/40 to-blue-700/40 border border-blue-500/30 p-6 rounded-xl">
+        <p className="text-gray-300 text-sm mb-2">Balance Atlasium</p>
+        <p className="text-4xl font-bold text-blue-400">{user.atlBalance || '0'}</p>
+        <p className="text-gray-400 text-xs mt-1">ATL Tokens</p>
       </div>
 
       {/* Action Buttons */}
