@@ -84,7 +84,7 @@ export default function LayoutResponsive({ children }) {
 
       {/* ============ HEADER MÓVIL ============ */}
       {isMobile && (
-        <header className="fixed top-0 left-0 w-full h-14 bg-dark z-50 border-b border-neutral-700 flex items-center px-4 shadow-md">
+        <header className="fixed top-0 left-0 w-full h-14 bg-neutral-900 z-50 border-b border-neutral-700 flex items-center px-4 shadow-md">
           <Link to="/profile" className="flex items-center gap-2 text-gray-400 hover:text-white">
             <FiUser size={20} />
             <span className="text-xs">Perfil</span>
@@ -104,7 +104,7 @@ export default function LayoutResponsive({ children }) {
 
       {/* ============ BOTTOM NAV MÓVIL ============ */}
       {isMobile && (
-        <nav className="fixed bottom-0 left-0 w-full h-16 bg-dark z-50 border-t border-neutral-700 flex justify-around items-center shadow-lg">
+        <nav className="fixed bottom-0 left-0 w-full h-16 bg-neutral-900 z-50 border-t border-neutral-700 flex justify-around items-center shadow-lg">
           <Link to="/dashboard" className="flex flex-col items-center text-gray-400 hover:text-white">
             <FiHome size={20} />
             <span className="text-[10px] mt-1">Home</span>

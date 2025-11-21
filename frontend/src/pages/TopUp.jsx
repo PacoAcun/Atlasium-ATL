@@ -23,9 +23,9 @@ export default function TopUp() {
 
       if (error) throw error;
 
-      if (!data.success) throw new Error(data.error || 'Error en la recarga');
+      if (!data.success) throw new Error(data.error || 'Error en la compra');
 
-      alert(`Recarga exitosa de ${amount} ATL\nTx Hash: ${data.txHash.substring(0, 10)}...`);
+      alert(`Compra exitosa de ${amount} ATL\nTx Hash: ${data.txHash.substring(0, 10)}...`);
       await refreshBalance();
       navigate("/dashboard");
     } catch (error) {
@@ -37,19 +37,19 @@ export default function TopUp() {
   };
 
   if (loading) {
-    return <LoadingScreen text="Procesando Recarga..." />;
+    return <LoadingScreen text="Procesando Compra..." />;
   }
 
   return (
     <LayoutResponsive>
       <div className="max-w-md mx-auto mt-10">
         <BackButton to="/wallet" label="Volver a Wallet" />
-        <h1 className="text-3xl font-bold mb-6 text-white">Recargar Saldo</h1>
+        <h1 className="text-3xl font-bold mb-6 text-white">Comprar ATL</h1>
 
         <div className="bg-neutral-900 border border-neutral-800 p-6 rounded-xl">
           <form onSubmit={handleTopUp} className="space-y-6">
             <div>
-              <label className="block text-sm text-gray-400 mb-2">Monto a recargar (Q)</label>
+              <label className="block text-sm text-gray-400 mb-2">Monto a comprar (Q)</label>
               <div className="relative">
                 <span className="absolute left-4 top-3.5 text-gray-500">Q</span>
                 <input
