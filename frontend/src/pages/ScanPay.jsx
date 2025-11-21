@@ -4,6 +4,8 @@ import { Scanner } from "@yudiel/react-qr-scanner";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { AuthContext } from "../context/AuthContext";
+import { FiMegaphone } from "react-icons/fi";
+
 
 export default function ScanPay() {
   const navigate = useNavigate();
@@ -48,7 +50,7 @@ export default function ScanPay() {
       if (!data.success) throw new Error(data.error);
 
       await refreshBalance();
-      alert("✅ Pago Exitoso! Hash: " + data.txHash.slice(0, 10) + "...");
+      alert("Pago Exitoso! Hash: " + data.txHash.slice(0, 10) + "...");
       navigate("/dashboard");
     } catch (error) {
       console.error('Payment error:', error);
@@ -75,9 +77,10 @@ export default function ScanPay() {
       ) : (
         <div className="bg-neutral-900 border border-neutral-800 p-6 rounded-xl">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-2xl">
-              🏪
+            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
+              <FiMegaphone size={22} className="text-blue-400" />
             </div>
+
             <div>
               <p className="text-sm text-gray-400">Pagando a:</p>
               <p className="font-bold text-white text-lg">
@@ -95,7 +98,7 @@ export default function ScanPay() {
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full bg-black border border-neutral-700 rounded-lg p-4 text-2xl text-white text-center focus:border-purple-500 focus:outline-none"
+              className="w-full bg-black border border-neutral-700 rounded-lg p-4 text-2xl text-white text-center focus:border-blue-500 focus:outline-none"
               placeholder="0.00"
               autoFocus
               readOnly={!!parsedData?.amount} // Si el QR traía monto, es fijo
@@ -105,7 +108,7 @@ export default function ScanPay() {
           <button
             onClick={handlePayment}
             disabled={processing || !amount}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl transition disabled:opacity-50"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition disabled:opacity-50"
           >
             {processing ? "Procesando en Blockchain..." : "Confirmar Pago"}
           </button>

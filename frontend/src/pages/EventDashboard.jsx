@@ -103,7 +103,7 @@ export default function EventDashboard() {
           </div>
           <div className="text-right">
             <p className="text-xs text-gray-400">Balance</p>
-            <p className="text-xl font-bold text-purple-400">{currentEvent.balance} ATL</p>
+            <p className="text-xl font-bold text-blue-400">{currentEvent.balance} ATL</p>
             {currentEvent.userRole === 'admin' && (
               <Link to="/event-audit" className="text-xs text-blue-400 hover:text-blue-300 mt-1 block">
                 Ver Auditoría
